@@ -1,4 +1,4 @@
-<style lang="sass" src="../../assets/styles/layouts/main.scss" scoped></style>
+<style lang="sass" src="../../assets/styles/layouts/main.scss" ></style>
 
 
 <template>
@@ -60,14 +60,21 @@
             <div class="layout-content">
 
              <div class="layout-content-tabnavbar">
-                    <Tabs type="card" >
+                <ul class="tabnav">
+                    <li ><Icon type="arrow-left-b"></Icon></li>
+                    <li><Icon type="document-text"></Icon>首页</li>
+                    <li class="active"><Icon type="document-text"></Icon>订单管理</li>
+                    <li><Icon type="document-text"></Icon>系统设置</li>
+                    <li><Icon type="document-text"></Icon>订单管理</li>
+                </ul>
+                    <!-- <Tabs type="card" closable>
                         <Tab-pane label="macOS" icon="social-apple"></Tab-pane>
                         <Tab-pane label="Windows" icon="social-windows"></Tab-pane>
                         <Tab-pane label="Linux" icon="social-tux"></Tab-pane>
-                    </Tabs>
+                    </Tabs> -->
             </div>
                 
-            <Card :bordered="false" dis-hover >
+            <Card :bordered="false" dis-hover class="layout-content-main">
                         <div slot="title" >
                                                         <Breadcrumb>
                                 <Breadcrumb-item href="/">
