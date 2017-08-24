@@ -3,6 +3,6 @@ const routes = [{
     meta: {
         title: ''
     },
-    component: (resolve) => require(['../views/index.vue'], resolve)
+    component: (resolve) => require(['../compoments/layouts/main.vue'], resolve)
 }];
 export default routes;
