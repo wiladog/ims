@@ -64,7 +64,7 @@
                     <li ><Icon type="arrow-left-b"></Icon></li>
                     <li><Icon type="document-text"></Icon>首页</li>
                     <li class="active"><Icon type="document-text"></Icon>订单管理</li>
-                    <li><Icon type="document-text"></Icon>系统设置</li>
+                    <li v-for="n in 8"><Icon type="document-text"></Icon>系统设置{{ n }}</li>
                     <li><Icon type="document-text"></Icon>订单管理</li>
                 </ul>
                     <!-- <Tabs type="card" closable>
