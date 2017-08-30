@@ -1,84 +1,33 @@
-<style lang="sass" scoped>
+<style lang="sass" scoped  src="../assets/styles/layouts/tabnavbar.scss"></style>
 
-.tab-navigation-bar {
-				height: 49px;
-				min-height: 49px;
-				max-height: 49px;
-				border-bottom: 1px solid #e7e7e7;
-				box-sizing:border-box;
-				// background: red;
-				position: fixed;
-				top: 113;
-				left: 200;
-				z-index: 9999;
-				width: 100vw;
-				background: #fff;
-
-				.tabnav {
-					display: flex;
-					height: 49px;
-					align-content: center;
-					overflow: hidden;
-					li {
-						font-size: 14px;
-						// background: #f8f8f8;
-						padding: 14px 10px;
-					    position: relative;
-					    // cursor: pointer;
-					    z-index: 1;
-					    &:hover {
-					    	background: #f8f8f8;
-					    	cursor: pointer;
-					    	&::before {
-							    color: red;
-					    	}
-					    }
-					    border-right: 1px solid #e7e7e7;
-					    border-bottom: 1px solid #e7e7e7;
-					    transition: all .2s ease-in-out;
-					    
-					    .tabnav-close {
-					    	margin-left: 5px;
-					    	&:hover {
-					    		color: red;
-					    	}
-					    }
-
-					    
-					}
-
-					.active {
-						background: #fff;
-						border-bottom: none;
-						color: #2d8cf0;
-						.tabnav-close {
-							color: #495060;
-						}
-						&:hover {
-					    	background: #fff;
-					    }
-					}
-				}
-
-				
-				 
-				
-
-			}
-
-</style>
 <template>
 	<div class="tab-navigation-bar">
-		<ul class="tabnav">
+		<div class="tabnavs">
+			<ul class="tabnav">
 		    <li ><Icon type="arrow-left-b"></Icon></li>
-		   	<li v-for="(item, index) in cloneItems" :class="item.class" @click="handleClick(index)" ><!--  @click="handleClick(index)" -->
+		   	<li v-for="(item, index) in cloneItems" :class="item.class" @click="handleClick(index)" >
 		    	<Icon :type="item.icon"></Icon>
 		    	{{ item.name }}
-		    	
 		    	<Icon type="android-close" class="tabnav-close" v-if="index != 0"  @click.native.stop="tabNavClose(index)"></Icon>
 		    </li>
 		    <li ><Icon type="arrow-right-b"></Icon></li>
-		</ul>                
+		</ul>
+
+		</div>
+		<div class="breadcrumb">
+			<Breadcrumb>
+                <Breadcrumb-item href="/">
+                    <Icon type="ios-home-outline"></Icon> 首页
+                </Breadcrumb-item>
+                <Breadcrumb-item href="/components/breadcrumb">
+                    <Icon type="social-buffer-outline"></Icon> 权限管理
+                </Breadcrumb-item>
+                <Breadcrumb-item>
+                    <Icon type="pound"></Icon> 角色列表
+                </Breadcrumb-item>
+            </Breadcrumb>
+		</div>
+		             
 	</div>
 </template>
 <script>
