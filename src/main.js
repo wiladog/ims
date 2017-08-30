@@ -21,8 +21,8 @@ Vue.use(iView);
 // 自动设置语言
 const navLang = navigator.language;
 const localLang = (navLang === 'zh-CN' || navLang === 'en-US') ? navLang : false;
-const lang = window.localStorage.getItem('language') || localLang || 'zh-CN';
-// const lang = 'zh-CN'; // 设置语言为 zh-CN
+// const lang = window.localStorage.getItem('language') || localLang || 'zh-CN';
+const lang = 'zh-CN'; // 设置语言为 zh-CN
 Vue.config.lang = lang;
 
 // set locales

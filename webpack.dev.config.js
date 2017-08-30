@@ -19,7 +19,7 @@ module.exports = merge(webpackBaseConfig, {
     },
     devServer: {
         open:true,
-        host: 'ims.wiladog.com',
+        host: 'ims.wiladog.dev',
         port: 80,
         stats: { colors: true },
         // proxy: {

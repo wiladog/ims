@@ -49,59 +49,7 @@
 			flex-direction: column;
 
 
-			.layout-content-tabnavbar {
-				height: 49px;
-				min-height: 49px;
-				max-height: 49px;
-				border-bottom: 1px solid #e7e7e7;
-				box-sizing:border-box;
-				// background: red;
-				position: fixed;
-				top: 113;
-				left: 200;
-				z-index: 9999;
-				width: 100vw;
-				background: #fff;
-
-				.tabnav {
-					display: flex;
-					height: 49px;
-					align-content: center;
-					overflow: hidden;
-					li {
-						// width: 80px;
-						font-size: 14px;
-						// background: #f8f8f8;
-						padding: 14px 24px;
-					    position: relative;
-					    cursor: pointer;
-					    z-index: 1;
-					    &:hover {
-					    	background: #f8f8f8;
-					    }
-					    border-right: 1px solid #e7e7e7;
-					    border-bottom: 1px solid #e7e7e7;
-					    transition: all .2s ease-in-out;
-					    i {
-					    	margin-right: 8px;
-					    }
-					}
-
-					.active {
-						background: #fff;
-						border-bottom: none;
-						&:hover {
-					    	background: #fff;
-					    }
-					}
-				}
-
-				// margin-bottom: 49px;
-				// .ivu-tabs.ivu-tabs-card>.ivu-tabs-bar .ivu-tabs-tab
-				 
-				
-
-			}
+			
 			.layout-content-breadcrumb {
 				height: 25px;
 				min-height: 25px;

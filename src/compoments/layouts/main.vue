@@ -17,7 +17,7 @@
             <div class="layout-sider-nav" :style="styleObject">
                 
             
-                <Menu theme="dark" width="auto" v-for="n in 20">
+                <Menu theme="dark" width="auto" v-for="n in menus">
                 <Submenu name="1">
                     <template slot="title">
                         <Icon type="ios-paper"></Icon>
@@ -58,27 +58,14 @@
             </div>
             
             <div class="layout-content">
-
-             <div class="layout-content-tabnavbar">
-                <ul class="tabnav">
-                    <li ><Icon type="arrow-left-b"></Icon></li>
-                    <li><Icon type="document-text"></Icon>首页</li>
-                    <li class="active"><Icon type="document-text"></Icon>订单管理</li>
-                    <li v-for="n in 8"><Icon type="document-text"></Icon>系统设置{{ n }}</li>
-                    <li><Icon type="document-text"></Icon>订单管理</li>
-                </ul>
-                    <!-- <Tabs type="card" closable>
-                        <Tab-pane label="macOS" icon="social-apple"></Tab-pane>
-                        <Tab-pane label="Windows" icon="social-windows"></Tab-pane>
-                        <Tab-pane label="Linux" icon="social-tux"></Tab-pane>
-                    </Tabs> -->
-            </div>
+                <!-- :items="tabnavs" -->
+             <Tabnavigationbar :items="tabnavs"></Tabnavigationbar>
                 
             <Card :bordered="false" dis-hover class="layout-content-main">
                         <div slot="title" >
-                                                        <Breadcrumb>
+                            <Breadcrumb>
                                 <Breadcrumb-item href="/">
-                                    <Icon type="ios-home-outline"></Icon> Home
+                                    <Icon type="ios-home-outline"></Icon> 首页
                                 </Breadcrumb-item>
                                 <Breadcrumb-item href="/components/breadcrumb">
                                     <Icon type="social-buffer-outline"></Icon> Components
@@ -87,7 +74,6 @@
                                     <Icon type="pound"></Icon> Breadcrumb
                                 </Breadcrumb-item>
                             </Breadcrumb>
-
                             <!-- <Alert>消息提示文案</Alert> -->
                         </div>
 
@@ -138,30 +124,8 @@
                     </Card>
 
 
-                <!-- 
-
-
-                <div class="layout-content-breadcrumb">
-                    <Breadcrumb>
-                        <Breadcrumb-item href="/">
-                            <Icon type="ios-home-outline"></Icon> Home
-                        </Breadcrumb-item>
-                        <Breadcrumb-item href="/components/breadcrumb">
-                            <Icon type="social-buffer-outline"></Icon> Components
-                        </Breadcrumb-item>
-                        <Breadcrumb-item>
-                            <Icon type="pound"></Icon> Breadcrumb
-                        </Breadcrumb-item>
-                    </Breadcrumb>
-                </div>
-                <div class="layout-content-main">
-                
-                    <Card :bordered="true" dis-hover>
-                        <p slot="title">无边框标题</p>
-                        <p>无边框内容填充无边框内容填充无边框内容填充无边框内容填充无边框内容填充无边框内容填充无边框内容填充无边框内容填充无边框内容填充无边框内容填充无边框内容填充。</p>
-                    </Card>
-                </div>
- -->            </div>
+              
+        </div>
         </div>
         
        
@@ -170,12 +134,35 @@
     </div>
 </template>
 <script>
+import Tabnavigationbar from '../tabnavbar.vue';
     export default {
         beforeCreate(){
             // console.log(this);
         },
+        components:{
+            'Tabnavigationbar': Tabnavigationbar
+        },
         data () {
             return {
+                tmptabnavs:[],
+                menus:[1,2,3,4,5,6],
+                tabnavs:[
+                        {
+                            name:'系统设置',
+                            icon:'chatbubble',
+                            class:'',
+                        },
+                        {
+                            name:'权限设置',
+                            icon:'monitor',
+                            class:'',
+                        },
+                        {
+                            name:'打印管理',
+                            icon:'printer',
+                            class:'',
+                        }
+                    ],
                 formItem: {
                     input: '',
                     select: '',
