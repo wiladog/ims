@@ -1,0 +1,194 @@
+.layout {
+	background: red;
+	display: flex;
+	min-height: 100vh;
+	flex-direction: column;
+
+	.layout-header {
+		height: 64px;
+		// background: gray;
+		box-shadow: 0 1px 1px rgba(0,0,0,.1);
+		position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 10;
+        width: 100vw;
+        border-bottom: 1px solid #e7e7e7;
+        box-sizing:border-box;
+        display: flex;
+
+        .layout-header-sl {
+        	flex: 0 0 200px;
+		    max-width: 200px;
+		    min-width: 200px;
+		    width: 200px;
+		    font-size: 24px;
+		    align-self: center;
+            text-align:center;
+            color: #fff;
+            height: 64px;
+            line-height: 64px;
+            background: #495060;
+        }
+
+        .layout-header-mr {
+
+        	
+
+        	flex: 1;
+                background: #fff;
+                display: flex;
+                justify-content: space-between;
+                .ivu-menu {
+                        
+                        .ivu-menu-item {
+                            border-color: #fff;
+                            &.ivu-menu-item-active,
+                            &:hover {
+                                // border-bottom: 2px solid #3399ff;
+                                a {
+                                    color: #3399ff;
+                                }
+                            }
+                            a {
+                                color: #657180;
+                            }
+                        }
+
+                        .ivu-menu-submenu {
+                            border-color: #fff;
+                            &.ivu-menu-item-active,
+                            &:hover {
+                                border-bottom: 2px solid #3399ff;
+                                
+                            }
+                            .ivu-menu-item {
+                                &.ivu-menu-item-active,
+                                &:hover {
+                                    border-bottom: 0;
+                                    a {
+                                        color: #3399ff;
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+
+
+        }
+
+	}
+
+	.layout-middle {
+		margin-top: 64px;
+		flex: 1;
+		background: #fff;
+		display: flex;
+		.layout-sider {
+			    flex: 0 0 200px;
+			    max-width: 200px;
+			    min-width: 200px;
+			    width: 200px;
+			    
+			    background: #495060;
+			    
+			    color: #fff;
+			    
+			    .layout-sider-nav {
+			    	position: fixed;
+		        	top: 64;
+		        	left: 0;
+		        	// height: 200px;
+			    	width: 200px;
+			    	min-width: 200px;
+			    	// overflow: scroll;
+			    	overflow-y: scroll;
+			    }
+			    
+			    
+		}
+		.layout-content {
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+
+			
+			.layout-content-breadcrumb {
+				height: 25px;
+				min-height: 25px;
+				max-height: 25px;
+				// border-bottom: 1px solid #eee;
+				padding-left: 16px;
+				// margin-top: 49px;
+			}
+
+			.layout-content-main {
+				flex: 1;
+
+				// margin-top: 91px;
+				padding: 16px;
+				// width: 100%;
+				// background: gray;
+			}
+		}
+	}
+
+	.layout-footer {
+		position:fixed;
+		width: 100vw;
+		bottom: 0;
+		height: 40px;
+		background-color: #f8f8f8;
+	    // border-color: #e7e7e7;
+	    // border: 1px;
+	    
+	    // box-sizing:border-box;
+	    line-height: 40px;
+	    display: flex;
+
+	    .layout-footer-sl {
+    		flex: 0 0 200px;
+		    max-width: 200px;
+		    min-width: 200px;
+		    width: 200px;
+		    text-align: center;
+		    background: #495060;
+
+		    align-self: center;
+            text-align:center;
+            color: #fff;
+
+
+
+		    border-top: 1px solid #495060;
+
+	    }
+
+	    .layout-footer-mr {
+	    	border-top: 1px solid #e7e7e7;
+	    	text-align: center;
+	    	flex: 1;
+	    }
+	}
+}
+// .layout-content-tabnavbar {
+// 	.ivu-tabs.ivu-tabs-card {
+// 	> .ivu-tabs-bar {
+// 		.ivu-tabs-tab {
+// 			border-radius: 0;
+// 			border: none;
+// 			border-right: 1px solid #dddee1;
+// 			margin-right: 0;
+// 		}
+// 	}
+					
+					
+// }
+// }
+
+
+
+// .ivu-tabs-bar {
+// 	border: 20px solid red;
+// }

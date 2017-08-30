@@ -1,16 +1,13 @@
 <style lang="sass" src="../../assets/styles/layouts/main.scss" ></style>
-
-
 <template>
     <div class="layout">
-        
         <div class="layout-header">
-            <div class="layout-header-sl">
-                档案管理系统
+            <div class="layout-logo">
+                <span>后台管理</span>
             </div>
-            <div class="layout-header-mr">
+            <div class="layout-nav">
                 <Menu mode="horizontal" theme="light"  >
-                    &nbsp;
+                    
                     <Menu-item name="1">
                         <Icon type="ios-paper"></Icon>
                         
@@ -20,25 +17,15 @@
                         <Icon type="ios-people"></Icon>
                         <router-link to="/admin/index" >用户</router-link>
                     </Menu-item>
-                    <Submenu name="3">
-                        <template slot="title">
-                            <Icon type="chatbubble-working"></Icon>
-                            微信
-                        </template>
-                        
-                            <Menu-item name="3-1">新增和启动</Menu-item>
-                            
-                        
-                    </Submenu>
+                  
                     
+                
                 </Menu>
                 <Menu mode="horizontal" theme="light"  >
-                    <Menu-item name="1">
+                    <!-- <Menu-item name="1">
                         <router-link to="http://www.jixinghai.com/" >首页</router-link>
                     </Menu-item>
-                    
- 
-                        <Submenu name="3">
+ -->                    <Submenu name="3">
                         <template slot="title">
                             <Icon type="person"></Icon>
                             管理员
@@ -50,58 +37,74 @@
                     </Submenu>
                     
                 </Menu>
-
             </div>
         </div>
-
-        
-        <div class="layout-middle">
-
-            <div class="layout-sider" :style="siderStyle">
-          
-            <div class="layout-sider-nav" :style="styleObject">
-                <Sidenav></Sidenav>
-            </div>
-               
-            </div>
-            
-            <div class="layout-content">
-                <!-- :items="tabnavs" -->
-             <Tabnavigationbar :items="tabnavs" ></Tabnavigationbar>
-
-             <div class="layout-content-main">
-                 <router-view></router-view>
-             </div>
+        <div class="layout-main">
+            <div class="layout-left" :style="styleObject">
+                <!-- <div class="layout-sider-nav" > -->
+                <Menu theme="dark" width="200" @on-select="handleSelect" v-for="n in 20">
+                <Submenu name="1">
+                    <template slot="title">
+                        <Icon type="ios-paper"></Icon>
+                        内容管理
+                    </template>
+                    <Menu-item name="/admin/news_categories">文章类别</Menu-item>
+                    <Menu-item name="/admin/news">文章管理</Menu-item>
+                    <!-- <Menu-item name="1-3">举报管理</Menu-item> -->
+                </Submenu>
+                <Submenu name="2">
+                    <template slot="title">
+                        <Icon type="ios-people"></Icon>
+                        用户管理
+                    </template>
+                    <Menu-item name="2-1">新增用户</Menu-item>
+                    <Menu-item name="2-2">活跃用户</Menu-item>
+                </Submenu>
                 
-            
-
-
-              
-        </div>
-        </div>
-        
-       
-        <div class="layout-footer">
-            <div class="layout-footer-sl">
-                <Icon type="ios-arrow-back" size="18"  @click.native="toggleSiderbar"></Icon>
+            </Menu>
+                
+                   <!-- </div>  -->
             </div>
-            <div class="layout-footer-mr">
-                wiladog
+
+            <div class="layout-right">
+                <div >
+                    <Tabnavigationbar :items="tabnavs"></Tabnavigationbar>
+                </div>
+                <!-- <Tabnavigationbar :items="tabnavs"></Tabnavigationbar> -->
+                <div class="layout-content"  ref="contents">
+
+                    <transition name="fade">
+                        <router-view></router-view>
+                    </transition>
+                
+                </div>
+                <div class="layout-footer">
+                    2017-2099 © wiladog
+                </div>
             </div>
         </div>
-       
     </div>
 </template>
+
 <script>
 import Tabnavigationbar from '../tabnavbar.vue';
-import Sidenav from '../sidenav.vue';
     export default {
-        beforeCreate(){
-            // console.log(this);
-        },
         components:{
-            'Sidenav': Sidenav,
+            // 'Sidenav': Sidenav,
             'Tabnavigationbar': Tabnavigationbar
+        },
+        computed:{
+            styleObject: function () {
+               return {
+                    height: document.documentElement.clientHeight - 60 + 'px',
+                    maxHeight: document.documentElement.clientHeight - 60 + 'px'
+                }
+            },
+            siderStyle: function () {
+                return {
+                    display: ''
+                }
+            }
         },
         data () {
             return {
@@ -121,39 +124,23 @@ import Sidenav from '../sidenav.vue';
                             icon:'printer',
                             class:'',
                         }
-                    ]
+                    ],
                 
-            }
-        },
-        computed:{
-            styleObject: function () {
-               return {
-                    height: document.documentElement.clientHeight - 104 + 'px',
-                    display:''
-                }
-            },
-            siderStyle: function () {
-                return {
-                    display: ''
+                contentStyle: {
+
+                    marginLeft: '15px'
                 }
             }
-        },
-        mounted() {
-
-        },
-        beforeDestroy() {
-
         },
         methods: {
-            toggleSiderbar() {
-                console.info(this.siderStyle.display);
-                if(this.siderStyle.display != 'none') {
-                    // alert(1);
-                    this.siderStyle.display = 'none';
-                }
-                
-                console.info(this.siderStyle);
+
+            handleTabRemove (name) {
+                this['tab' + name] = false;
+            },
+            handleSelect(name) {
+                console.info(name);
+                this.$router.push(name);
             }
         }
-    };
+    }
 </script>

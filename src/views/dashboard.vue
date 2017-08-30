@@ -1,9 +1,12 @@
-<style scoped>
-   
+<style  lang="sass" scoped>
+   .index {
+       }
 </style>
 <template>
     <div class="index">
         <Table :columns="columns1" :data="data1"></Table>
+
+                <Table :columns="columns1" :data="data1"></Table>
 
                         <Form :model="formItem" :label-width="80">
         <Form-item label="输入框">
