@@ -7,10 +7,6 @@ import Util from '../libs/util'
 export default {
   
 
-
-
-
-
   // captcha:this.loginData.captcha
   checkC (params, cb) {
 

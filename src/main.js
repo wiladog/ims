@@ -33,12 +33,46 @@ Object.keys(locales).forEach(function (lang) {
 // store configuration
 const store = new Vuex.Store(StoreConstructorOptions);
 // 路由配置
+
 const router = new VueRouter(RouterConstructionOptions);
 
 router.beforeEach((to, from, next) => {
+
     iView.LoadingBar.start();
     Util.title(to.meta.title);
-    next();
+    if(window.localStorage.getItem('token')){
+        if (to.path === '/login') {
+            next({path:'/dashboard'});
+        } else {
+            if(store.getters.addRoutes.length == 0) {
+                // 动态根据用户增加路由
+                store.dispatch('getRoutes',{token:window.localStorage.getItem('token')}).then((rsp) =>{
+                   console.info(store.getters.addRoutes);
+                    router.addRoutes(store.getters.addRoutes);
+                    next({...to});
+                // next('/roles');
+                });
+            } else {
+                // 这里还可以做验证
+                // console.info(router);
+                // console.info(to);
+                store.dispatch('changeNavtabs', to);
+                next();
+            }
+            
+        }
+
+    } else {
+        if(to.path == '/login') {
+            next();
+        } else {
+            next('/login');
+        }
+        // next('/login');
+        console.info('没有登录');
+    }
+    
+    
 });
 
 router.afterEach(() => {

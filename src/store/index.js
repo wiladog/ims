@@ -1,8 +1,9 @@
 import * as actions from './actions'
 import * as getters from './getters'
 
-import login from './modules/login'
+import user from './modules/user'
 import articles from './modules/articles'
+import layout from './modules/layout'
 
 // import createLogger from '../../../src/plugins/logger'
 
@@ -13,8 +14,9 @@ const StoreConstructorOptions = {
 	actions,
   	getters,
   	modules: {
-    	login,
-    	articles
+    	user,
+    	articles,
+    	layout
   	},
   	strict: debug,
   	plugins: []

@@ -2,55 +2,46 @@
 
 <template>
 	<div >
-		<Menu theme="dark" width="auto" v-for="n in menus">
-                <Submenu name="1">
-                    <template slot="title">
-                        <Icon type="ios-paper"></Icon>
-                        内容管理
-                    </template>
-                    <Menu-item name="1-1">文章管理</Menu-item>
-                    <Menu-item name="1-2">评论管理</Menu-item>
-                    <Menu-item name="1-3">举报管理</Menu-item>
-                </Submenu>
-                <Submenu name="2">
-                    <template slot="title">
-                        <Icon type="ios-people"></Icon>
-                        用户管理
-                    </template>
-                    <Menu-item name="2-1">新增用户</Menu-item>
-                    <Menu-item name="2-2">活跃用户</Menu-item>
-                </Submenu>
-                <Submenu name="3">
-                    <template slot="title">
-                        <Icon type="stats-bars"></Icon>
-                        统计分析
-                    </template>
-                    <Menu-group title="使用">
-                        <Menu-item name="3-1">新增和启动</Menu-item>
-                        <Menu-item name="3-2">活跃分析</Menu-item>
-                        <Menu-item name="3-3">时段分析</Menu-item>
-                    </Menu-group>
-                    <Menu-group title="留存">
-                        <Menu-item name="3-4">用户留存</Menu-item>
-                        <Menu-item name="3-5">流失用户</Menu-item>
-                    </Menu-group>
-                </Submenu>
-
-            </Menu>
-		             
+		<Menu theme="dark" width="auto" @on-select="handleClick">
+      <Submenu name="1" v-for="item in items" v-if="item.children">
+          <template slot="title">
+              <Icon type="ios-paper"></Icon>
+              {{ item.meta.title }}
+          </template>
+          <MenuItem :name="its.path" v-for="its in item.children">{{ its.meta.title }}</MenuItem>
+          
+      </Submenu>
+      <Menu-item :name="item.path" v-for="item in items" v-if="!item.children">{{ item.meta.title }}</Menu-item>
+    </Menu>
 	</div>
 </template>
 <script>
     export default {
+      created() {
+        console.info(this.items);
+      },
     	name:'Sidenav',
+      props: {
+        items:{
+          type: Array,
+                default () {
+                    return [
+                      
+                    ];
+                }
+        }
+      },
     	data() {
     		return {
-    			
-                menus:[1,2,3,4,5,6,7]
+                
     		}
     	},
         methods: {
-        	
+        	handleClick(name) {
+            // console.info(name);
+            this.$router.push(name);
+
+          },
             handleStart() {
                 this.$Modal.info({
                     title: 'Bravo',

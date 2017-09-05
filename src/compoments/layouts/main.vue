@@ -3,12 +3,13 @@
     <div class="layout">
         <div class="layout-header">
             <div class="layout-logo">
-                <span>后台管理</span>
+                <span>档案管理系统</span>
             </div>
             <div class="layout-nav">
+            <!-- style="background: #26B9CE;" -->
                 <Menu mode="horizontal" theme="light"  >
-                    
-                    <Menu-item name="1">
+                    &nbsp;
+                    <!-- <Menu-item name="1">
                         <Icon type="ios-paper"></Icon>
                         
                         <router-link to="/admin/add" >内容</router-link>
@@ -16,7 +17,7 @@
                     <Menu-item name="2">
                         <Icon type="ios-people"></Icon>
                         <router-link to="/admin/index" >用户</router-link>
-                    </Menu-item>
+                    </Menu-item> -->
                   
                     
                 
@@ -41,35 +42,13 @@
         </div>
         <div class="layout-main">
             <div class="layout-left" :style="styleObject">
-                <!-- <div class="layout-sider-nav" > -->
-                <Menu theme="dark" width="200" @on-select="handleSelect" v-for="n in 20">
-                <Submenu name="1">
-                    <template slot="title">
-                        <Icon type="ios-paper"></Icon>
-                        内容管理
-                    </template>
-                    <Menu-item name="/admin/news_categories">文章类别</Menu-item>
-                    <Menu-item name="/admin/news">文章管理</Menu-item>
-                    <!-- <Menu-item name="1-3">举报管理</Menu-item> -->
-                </Submenu>
-                <Submenu name="2">
-                    <template slot="title">
-                        <Icon type="ios-people"></Icon>
-                        用户管理
-                    </template>
-                    <Menu-item name="2-1">新增用户</Menu-item>
-                    <Menu-item name="2-2">活跃用户</Menu-item>
-                </Submenu>
-                
-            </Menu>
-                
-                   <!-- </div>  -->
+                <Sidenav :items="gtRoutes"></Sidenav>
             </div>
 
             <div class="layout-right">
-                <div >
-                    <Tabnavigationbar :items="tabnavs"></Tabnavigationbar>
-                </div>
+                <!-- <div ></div> -->
+                    <Tabnavigationbar :items="tabnavs" :breadcrumbs="breadcrumbs"></Tabnavigationbar>
+                
                 <!-- <Tabnavigationbar :items="tabnavs"></Tabnavigationbar> -->
                 <div class="layout-content"  ref="contents">
 
@@ -88,42 +67,61 @@
 
 <script>
 import Tabnavigationbar from '../tabnavbar.vue';
+import Sidenav from '../sidenav.vue';
+import { mapGetters, mapActions } from 'vuex'
     export default {
+        created(){
+            
+            // console.info('----debug-------');
+            // console.info(this.gtRoutes);
+        },
+        mounted() {
+            this.$nextTick(function(){
+                const _self = this;
+                window.onresize = function () {
+                    _self.clientHeight = document.documentElement.clientHeight - 60;
+                }
+            });
+            
+        },
+        
         components:{
-            // 'Sidenav': Sidenav,
+            'Sidenav': Sidenav,
             'Tabnavigationbar': Tabnavigationbar
         },
+
+
         computed:{
             styleObject: function () {
                return {
-                    height: document.documentElement.clientHeight - 60 + 'px',
-                    maxHeight: document.documentElement.clientHeight - 60 + 'px'
+                    height: this.clientHeight + 'px',
+                    maxHeight: this.clientHeight + 'px'
                 }
             },
             siderStyle: function () {
                 return {
                     display: ''
                 }
-            }
+            },
+            ...mapGetters({
+                addRoutes:'addRoutes',
+                gtRoutes:'gtRoutes'
+            })
         },
         data () {
             return {
+                breadcrumbs:[{
+                    type:'ios-home-outline',
+                    name:'首页',
+                    path: '/dashboard'
+                },{
+                    type:'monitor',
+                    name:'菜单管理',
+                    path: '/menu'
+                }],
+                clientHeight: document.documentElement.clientHeight - 60,
                 tabnavs:[
-                        {
-                            name:'系统设置',
-                            icon:'chatbubble',
-                            class:'',
-                        },
-                        {
-                            name:'权限设置',
-                            icon:'monitor',
-                            class:'',
-                        },
-                        {
-                            name:'打印管理',
-                            icon:'printer',
-                            class:'',
-                        }
+                        
                     ],
                 
                 contentStyle: {
@@ -133,7 +131,9 @@ import Tabnavigationbar from '../tabnavbar.vue';
             }
         },
         methods: {
-
+            handleResize() {
+                console.info('aaaaa');
+            },
             handleTabRemove (name) {
                 this['tab' + name] = false;
             },

@@ -22,18 +22,13 @@ module.exports = merge(webpackBaseConfig, {
         host: 'ims.wiladog.dev',
         port: 80,
         stats: { colors: true },
-        // proxy: {
-        //     '/api': {
-        //       target: 'http://demos.dev',
-        //       pathRewrite: {'^/api' : '/'},
-        //       changeOrigin: true
-        //     },
-        //     '/files': {
-        //       target: 'http://demos.dev',
-        //       pathRewrite: {'^/files' : '/api'},
-        //       changeOrigin: true
-        //     }
-        // }
+        proxy: {
+            '/api': {
+              target: 'http://archives.edai.dev',
+              pathRewrite: {'^/api' : '/api'},
+              changeOrigin: true
+            },
+        }
     },
     plugins: [
         new ExtractTextPlugin({
