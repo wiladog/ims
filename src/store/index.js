@@ -4,9 +4,11 @@ import * as getters from './getters'
 import user from './modules/user'
 import articles from './modules/articles'
 import layout from './modules/layout'
+import stock from './modules/stock'
+import product from './modules/product'
+import permissions from './modules/permissions'
 
 // import createLogger from '../../../src/plugins/logger'
-
 
 const debug = process.env.NODE_ENV !== 'production'
 
@@ -16,7 +18,10 @@ const StoreConstructorOptions = {
   	modules: {
     	user,
     	articles,
-    	layout
+    	layout,
+      stock,
+      product,
+      permissions
   	},
   	strict: debug,
   	plugins: []

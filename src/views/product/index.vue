@@ -10,16 +10,16 @@
         </Row>
     <Modal
         v-model="isShowModal"
-        title="增加权限"
+        title="增加产品"
         @on-ok="ok"
         >
         <Form :model="formItem" :label-width="80">
-            <Form-item label="权限名称：">
-                <Input v-model="formItem.name" placeholder="权限名称："></Input>
+            <Form-item label="产品名称：">
+                <Input v-model="formItem.name" placeholder="产品名称"></Input>
             </Form-item>
         </Form>
     </Modal>
-        <Table :columns="columns" border size="small" :data="permissions"></Table>
+        <Table :columns="columns" border size="small" :data="product"></Table>
     </div>
 </template>
 <script>
@@ -28,20 +28,18 @@ import { mapGetters, mapActions } from 'vuex'
     export default {
         created: function () {
             this.$nextTick(() => {
-                this.$store.dispatch('getPermissions');
+                this.$store.dispatch('getProduct');
             });
         },
         methods: {
             ok () {
-                let createOrUpdate = this.formItem.id ? 'updatePermissions' : 'createPermissions';
+                let createOrUpdate = this.formItem.id ? 'updateProduct' : 'createProduct';
                 this.$store.dispatch(createOrUpdate,this.formItem);
-                // console.info('vvv');
             },
             createOrUpdate(index) {
-                // console.info(index);
                 if(index >= 0) {
-                    this.formItem.name = this.permissions[index].name;
-                    this.formItem.id = this.permissions[index].id;
+                    this.formItem.name = this.product[index].name;
+                    this.formItem.id = this.product[index].id;
                     this.formItem.index = index;
                 } else {
                     this.formItem.name = '';
@@ -52,7 +50,7 @@ import { mapGetters, mapActions } from 'vuex'
         },
         computed: {
             ...mapGetters({
-                permissions:'permissions',
+                product:'product',
             })
         },
         data () {
@@ -64,11 +62,11 @@ import { mapGetters, mapActions } from 'vuex'
                 isShowModal: false,
                 columns: [
                     {
-                        title: '权限ID',
+                        title: '产品ID',
                         key: 'id'
                     },
                     {
-                        title: '权限名称',
+                        title: '产品名称',
                         key: 'name'
                     },
                     {
@@ -86,7 +84,6 @@ import { mapGetters, mapActions } from 'vuex'
                                     },
                                     on: {
                                         click: () => {
-                                            // console.info(params.index);
                                             this.createOrUpdate(params.index);
                                         }
                                     }
@@ -101,7 +98,7 @@ import { mapGetters, mapActions } from 'vuex'
                                         'on-ok': () => {
                                             let pas = {id:params.row.id,index: params.index};
                                             // console.info(pas);
-                                            this.$store.dispatch('deletePermissions', pas);
+                                            this.$store.dispatch('deleteProduct', pas);
                                             this.$Message.info('删除成功');
                                         }
                                     }

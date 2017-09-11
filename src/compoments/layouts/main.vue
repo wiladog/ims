@@ -79,6 +79,7 @@ import { mapGetters, mapActions } from 'vuex'
             this.$nextTick(function(){
                 const _self = this;
                 window.onresize = function () {
+                    // console.info('aaaa');
                     _self.clientHeight = document.documentElement.clientHeight - 60;
                 }
             });
@@ -131,14 +132,11 @@ import { mapGetters, mapActions } from 'vuex'
             }
         },
         methods: {
-            handleResize() {
-                console.info('aaaaa');
-            },
             handleTabRemove (name) {
                 this['tab' + name] = false;
             },
             handleSelect(name) {
-                console.info(name);
+                // console.info(name);
                 this.$router.push(name);
             }
         }

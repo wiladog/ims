@@ -8,18 +8,8 @@
                 </Button>
             </Col>
         </Row>
-    <Modal
-        v-model="isShowModal"
-        title="增加权限"
-        @on-ok="ok"
-        >
-        <Form :model="formItem" :label-width="80">
-            <Form-item label="权限名称：">
-                <Input v-model="formItem.name" placeholder="权限名称："></Input>
-            </Form-item>
-        </Form>
-    </Modal>
-        <Table :columns="columns" border size="small" :data="permissions"></Table>
+    
+        <Table :columns="columns" border size="small" :data="user"></Table>
     </div>
 </template>
 <script>
@@ -28,7 +18,7 @@ import { mapGetters, mapActions } from 'vuex'
     export default {
         created: function () {
             this.$nextTick(() => {
-                this.$store.dispatch('getPermissions');
+                this.$store.dispatch('getUsers');
             });
         },
         methods: {
@@ -38,21 +28,14 @@ import { mapGetters, mapActions } from 'vuex'
                 // console.info('vvv');
             },
             createOrUpdate(index) {
+                this.$router.push({path:'/user/add'});
                 // console.info(index);
-                if(index >= 0) {
-                    this.formItem.name = this.permissions[index].name;
-                    this.formItem.id = this.permissions[index].id;
-                    this.formItem.index = index;
-                } else {
-                    this.formItem.name = '';
-                    this.formItem.id = '';
-                }
-                this.isShowModal = true;
+                // this.isShowModal = true;
             }
         },
         computed: {
             ...mapGetters({
-                permissions:'permissions',
+                user:'user',
             })
         },
         data () {
@@ -64,12 +47,24 @@ import { mapGetters, mapActions } from 'vuex'
                 isShowModal: false,
                 columns: [
                     {
-                        title: '权限ID',
-                        key: 'id'
+                        title: '用户名',
+                        key: 'username'
                     },
                     {
-                        title: '权限名称',
+                        title: '姓名',
                         key: 'name'
+                    },
+                    {
+                        title: '手机',
+                        key: 'mobile'
+                    },
+                    {
+                        title: '邮箱',
+                        key: 'email'
+                    },
+                    {
+                        title: '角色',
+                        key: 'roles'
                     },
                     {
                         title: '操作',

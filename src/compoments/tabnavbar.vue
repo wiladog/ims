@@ -2,19 +2,22 @@
 
 <template>
 	<div class="tab-navigation-bar">
-		<div class="tabnavs">
-			<ul class="tabnav">
-		      <li ><Icon type="arrow-left-b"></Icon></li>
-              <!-- :class="item.class" -->
-		   	  <li v-for="(item, index) in navtabs" :class="[item.isActive ? 'active' : '']"  @click="handleClick(item.path)" >
-		    	<Icon :type="item.icon"></Icon>
-		    	{{ item.name }}
-		    	<Icon type="android-close" class="tabnav-close" v-if="index != 0"  @click.native.stop="tabNavClose(index)"></Icon>
-		      </li>
-		      <li ><Icon type="arrow-right-b"></Icon></li>
-		    </ul>
-		</div>
-		<div class="breadcrumb">
+ 
+        <div class="mens">
+            <span class="prev" @click="tabprev"><Icon type="arrow-left-b"></Icon></span>
+            <div class="tabs" ref="tabs" :style="styleObject">
+                <ul ref="uls" >
+                    <li v-for="(item, index) in navtabs" :class="[item.isActive ? 'active' : '']" ref="tbs" @click="handleClick(item.path)" >
+                    <Icon :type="item.icon"></Icon>
+                    {{ item.name }}
+                    <Icon type="android-close" class="tabnav-close" v-if="index != 0"  @click.native.stop="tabNavClose(index)"></Icon>
+                  </li>
+                </ul>
+            </div>
+            <span class="next"  @click="tabnext"><Icon type="arrow-right-b"></Icon></span>
+        </div>
+
+        <div class="breadcrumb">
 			<Breadcrumb>
                 <Breadcrumb-item :href="breadcrumb.path" v-for="breadcrumb in breadcrumbs">
                     <Icon :type="breadcrumb.type"></Icon> {{ breadcrumb.name }}
@@ -50,17 +53,67 @@ import { mapGetters, mapActions } from 'vuex'
                 }
             }
     	},
+        mounted() {
+            this.$nextTick(function(){
+                // console.info('aaaaa');
+
+                const _self = this;
+                window.onresize = function () {
+                    console.info('bbbbbb');
+                    _self.clientWidth = document.documentElement.clientWidth - 280;
+                }
+            });
+            
+        },
         computed: {
+            styleObject: function () {
+                console.info(this.clientWidth);
+               return {
+
+                    // width: this.clientWidth + 'px',
+                    // minWith: this.clientWidth + 'px'
+                    width: this.clientWidth + 'px'
+                }
+            },
             ...mapGetters({
                 navtabs:'navtabs',
             })
         },
+        created() {
+            this.$nextTick(function () {
+                let ull = 0;
+                this.$refs.tbs.forEach((item, k) => {
+                    ull += item.offsetWidth;
+                });
+                // this.$refs.uls.style.width = ull + 'px';
+            });
+            
+        },
     	data() {
     		return {
-    			cloneItems: this.makeItems()
+    			cloneItems: this.makeItems(),
+                clientWidth: document.documentElement.clientWidth - 280,
     		}
     	},
         methods: {
+
+            tabprev() {
+                console.info('prev');
+
+                let ileft = this.$refs.uls.offsetLeft + 85;
+                ileft >= 0 && (ileft =0);
+                this.$refs.uls.style.left = ileft + 'px';
+            },
+            tabnext() {
+                console.info('next');
+                let ileft = this.$refs.uls.offsetLeft -85;
+                let maxLeft = this.$refs.tabs.offsetWidth - this.$refs.uls.offsetWidth;
+                // console.info(ileft);
+                // ileft <= maxLeft && (ileft = maxLeft);
+                // console.info(ileft);
+                this.$refs.uls.style.left = ileft + 'px';
+
+            },
         	makeItems() {
 
         		// let items = this.items;

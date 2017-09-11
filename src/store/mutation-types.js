@@ -23,11 +23,36 @@ export const UPDATE_CATEGORIES = 'UPDATE_CATEGORIES'
 export const DELETE_CATEGORIES = 'DELETE_CATEGORIES'
 
 export const LOGIN = 'LOGIN'
-
 export const INTERNAL_ERROR = 'INTERNAL_ERROR'
-
 export const ADD_ROUTES = 'ADD_ROUTES'
-
 export const CHANGE_NAV_TABS = 'CHANGE_NAV_TABS'
-
 export const REMOVE_NAV_TABS = 'REMOVE_NAV_TABS'
+
+
+export const GET_RECORD = 'GET_RECORD'
+
+export const ALLOCATION = 'ALLOCATION'
+
+// 产品
+export const GET_PRODUCT = 'GET_PRODUCT'
+export const DELETE_PRODUCT = 'DELETE_PRODUCT'
+export const CREATE_PRODUCT = 'CREATE_PRODUCT'
+export const UPDATE_PRODUCT = 'UPDATE_PRODUCT'
+
+// 权限
+export const GET_PERMISSIONS = 'GET_PERMISSIONS'
+export const UPDATE_PERMISSIONS = 'UPDATE_PERMISSIONS'
+export const CREATE_PERMISSIONS = 'CREATE_PERMISSIONS'
+export const DELETE_PERMISSIONS = 'DELETE_PERMISSIONS'
+
+// 角色
+export const GET_ROLES = 'GET_ROLES'
+export const UPDATE_ROLES = 'UPDATE_ROLES'
+export const CREATE_ROLES = 'CREATE_ROLES'
+export const DELETE_ROLES = 'DELETE_ROLES'
+
+// 用户
+export const GET_USERS = 'GET_USERS'
+export const DELETE_USER = 'DELETE_USER'
+
+

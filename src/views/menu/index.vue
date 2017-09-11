@@ -1,7 +1,22 @@
 <style  lang="sass" scoped>
+.add-btn {
+    background: #26B9CE;
+    color: #fff;
+    border-color: #26B9CE;
+}
 </style>
 <template>
     <div >
+        <Row style="margin-bottom: 10px;">
+            <Col span="18" >
+            &nbsp;
+            </Col>
+            <Col span="6" style="text-align: right;">
+                <Button class="add-btn" @click="addMenu" >
+                    <Icon type="plus-round"></Icon>&nbsp;增加
+                </Button>
+            </Col>
+        </Row>
         <Table :columns="columns1" :data="data1"></Table>
     </div>
 </template>
@@ -17,28 +32,28 @@
                 total:100,
                 columns1: [
                     {
-                        title: '姓名',
+                        title: '菜单名称',
                         key: 'name'
                     },
                     {
-                        title: '年龄',
+                        title: '上级菜单',
                         key: 'age'
                     },
                     {
-                        title: '地址',
+                        title: '路径',
                         key: 'address'
                     }
                 ],
                 data1: [
                     {
-                        name: '王小明',
-                        age: 18,
-                        address: '北京市朝阳区芍药居'
+                        name: '菜单管理',
+                        age: '-',
+                        address: '/menu/index'
                     },
                     {
-                        name: '张小刚',
-                        age: 25,
-                        address: '北京市海淀区西二旗'
+                        name: '增加菜单',
+                        age: '菜单管理',
+                        address: '/menu/add'
                     },
                     {
                         name: '李小红',
@@ -68,6 +83,9 @@
             }
         },
         methods: {
+            addMenu() {
+
+            }
         }
     };
 </script>

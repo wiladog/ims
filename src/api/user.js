@@ -56,5 +56,23 @@ export default {
 
   },
 
+  getUsers( params) {
+    return Util.ajax({
+      method:'get',
+      url:'/api/users',
+      data:params
+    })
+  },
+
+  createUser(params) {
+    return Util.ajax({
+      method:'post',
+      url: '/api/users',
+      data:params
+    })
+  }
+
+
+
   // login ()
 }

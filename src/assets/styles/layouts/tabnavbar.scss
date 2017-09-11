@@ -13,27 +13,110 @@
 				z-index: 9;
 				width: 100vw;
 				background: #fff;
+
+				.mens {
+					// width: 600px;
+					height: 49px;
+					border-bottom: 1px solid #e7e7e7;
+					.prev {
+						height: 49px;
+						padding: 14px 16px;
+						font-size: 14px;
+						border-right: 1px solid #e7e7e7;
+						float: left;
+						width: 40px;
+					}
+					.tabs {
+						overflow:hidden; 
+						height:49px;
+						position:relative;
+						width: auto;
+						float: left;
+
+						ul {
+							position: absolute;
+							li {
+								list-style:none;
+								float:left;
+								display:inline; 
+								height:49px;
+								font-size: 14px;
+								padding: 14px 10px;
+								border-right: 1px solid #e7e7e7;
+							    border-bottom: 1px solid #e7e7e7;
+							    transition: all .2s ease-in-out;
+
+							    &:hover {
+							    	background: #f8f8f8;
+							    	cursor: pointer;
+							    	color: #2d8cf0;
+							    	.tabnav-close {
+										color: #495060;
+									}
+
+							    	
+							    }
+							    
+							    .tabnav-close {
+							    	margin-left: 5px;
+							    	&:hover {
+							    		color: red;
+							    	}
+							    }
+							}
+
+							.active {
+							background: #fff;
+							border-bottom: none;
+							color: #2d8cf0;
+							.tabnav-close {
+								color: #495060;
+							}
+							&:hover {
+						    	background: #fff;
+						    }
+						}
+						}
+					}
+					.next {
+						height: 49px;
+							padding: 14px 16px;
+							// width: 100px;
+							font-size: 14px;
+							border-left: 1px solid #e7e7e7;
+							// display: inline-block;
+							float: left;
+							width: 40px;
+							// border: 1px solid red;
+					}
+				}
+
 				.tabnavs {
 					height: 49px;
 					min-height: 49px;
 					max-height: 49px;
 					border-bottom: 1px solid #e7e7e7;
 					box-sizing:border-box;
+					padding-right: 200px;
+					// border: 1px solid red;
+					// overflow: scroll;
 
 					.tabnav {
-						display: flex;
+
+						
+						width: auto;
+						// display: flex;
 						height: 49px;
-						align-content: center;
-						border: none;
+						// align-content: center;
+						// border: 1px solid red;
 						// border-bottom: 1px solid #e7e7e7;
 						// box-sizing:border-box;
-						overflow: hidden;
+						// overflow: hidden;
 						li {
+							float: left;
 							font-size: 14px;
-							// background: #f8f8f8;
 							padding: 14px 10px;
-						    position: relative;
-						    // cursor: pointer;
+						    position: relative;float:left;display: inline-block;
 						    z-index: 1;
 						    &:hover {
 						    	background: #f8f8f8;
@@ -69,6 +152,8 @@
 						    }
 						}
 					}
+
+					
 
 				}
 				

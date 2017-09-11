@@ -14,7 +14,8 @@ const state = {
   message:'',
   addRoutes:[],
   routes:routes,
-  gtRoutes:[]
+  gtRoutes:[],
+  user:[],
 
   
 }
@@ -28,131 +29,8 @@ const getters = {
   addRoutes: state => state.addRoutes,
   routes:state => state.routes,
   gtRoutes: state => state.gtRoutes,
+  user:state => state.user,
 }
-
-// function generateRoutes2(data) {
-//   let tmpData = [];
-//   // console.info(data);
-//   data.forEach((item,k) => {
-
-
-//     if(item.path == '/') {
-//       console.info('后台根路由');
-//       item.component = (resolve) => require(['../../compoments/layouts/'+item.component+'.vue'], resolve)
-//       tmpData.push(item);
-
-//     } else {
-//       item.component = (resolve) => require(['../../views/'+item.component+'.vue'], resolve)
-//     tmpData.push(item);
-//       if(item.children) {
-//       generateRoutes2(item.children);
-//       }
-//     }
-    
-    
-//   });
-//   return tmpData;
-
-// }
-
-// function generateRoutes(items) {
-//   let routes = [];
-//   items.forEach((item,k) => {
-//     if(item.children) {
-//       // if(item.path == '/') {
-//       //   // console.info('ddd');
-//       //   let route = {
-//       //     path: item.path,
-//       //     meta: item.meta,
-//       //     icon: item.component,
-//       //     component: (resolve) => require(['../../compoments/layouts/'+item.component+'.vue'], resolve),
-//       //     children:[],
-//       //   }
-
-        
-//       //   // console.info(route.children);
-//       //   // console.info(item.children);
-
-//       //   item.children.forEach((c,n)=>{
-//       //     if(c.children) {
-//       //       c.children.forEach((aa,i)=>{
-//       //           route.children.push({
-//       //             path:aa.path,
-//       //             meta:aa.meta,
-//       //             compoment: (resolve) => require(['../../views/'+aa.compoment+'vue'], resolve)
-//       //           });
-//       //       });
-//       //     } else {
-//       //       route.children.push({
-//       //         path:c.path,
-//       //         meta:c.meta,
-//       //         compoment: (resolve) => require(['../../views/'+c.compoment+'vue'], resolve)
-//       //       });
-//       //     }
-//       //   });
-//       //   routes.push(route);
-//       // }
-
-//       let route = {
-//         path: item.path,
-//         meta: item.meta,
-//         component: (resolve) => require(['../../compoments/layouts/'+item.component+'.vue'], resolve)
-//       }
-//       let childrens = [];
-//       let tmpAchild = [];
-//       item.children.forEach((it,n)=>{
-//         childrens[n] = {
-//           path: it.path,
-//           meta: it.meta,
-//           component: (resolve) => require(['../../views/'+it.component+'.vue'], resolve)
-//         }
-//         if(it.children) {
-//           let tmpChild = [];
-//           it.children.forEach((its,m)=>{
-//             tmpChild[m] = {
-//               path: its.path,
-//               meta: its.meta,
-//               component: (resolve) => require(['../../views/'+its.component+'.vue'], resolve)
-//             } 
-//           });
-//           childrens[n].childrens = tmpChild;
-//           if(item.path == '/') {
-//             tmpAchild = tmpChild;
-//           }
-//           // console.info(k+'--'+n+ item.path);
-//         }
-//       });
-//       route.children = childrens;
-
-
-//       routes.push(route);
-//     } else {
-//       let route = {
-//         path: item.path,
-//         meta: item.meta,
-//         component: (resolve) => require(['../../views/'+item.component+'.vue'], resolve)
-//       }
-//       routes.push(route);
-//     }
-//     // return false;
-    
-    
-//   });
-
-
-// const notFoundRoute = {
-//       path: '*',
-//       meta: {
-//         title:'404',
-//       },
-//       component: (resolve) => require(['../../views/NotFoundComponent.vue'], resolve)
-//     };
-//   routes.push(notFoundRoute);
-//   // console.info(routes);
-//   return routes;
-    
-// }
-
 
 function generateRoutes(data) {
   // console.info(data);
@@ -263,11 +141,42 @@ const mutations = {
   [types.INTERNAL_ERROR] (state) {
       state.message = '网络错误!-' + Math.random();
       state.loging = !state.loging;
+  },
+  [types.GET_USERS] (state, data) {
+    state.user = data;
+  },
+  [types.DELETE_USER] (state, data) {
+    // state.user = data;
+  },
+  [types.CREATE_USER] (state, data) {
+    state.user.push(data);
   }
+
 }
 
 // actions
 const actions = {
+
+  getUsers ({commit, state}, p) {
+    user.getUsers(p).then((rsp)=>{
+      // console.info(rsp);
+      commit(types.GET_USERS, rsp.data.data);
+    });
+  },
+
+  createUser ({commit, state}, p) {
+    // console.info(p);
+    user.createUser(p).then((rsp)=>{
+      // console.info(rsp);
+      commit(types.CREATE_USER, rsp.data.data);
+    });
+  },
+
+  deleteUser ({commit, state}, p) {
+    user.deleteUser(p).then((rsp)=>{
+      // commit(types.DELETE_USER, rsp.data.data);
+    });
+  },
   
   login ({commit,state}, p) {
     // console.info(state);

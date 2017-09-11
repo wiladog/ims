@@ -2,6 +2,8 @@ import Vue from 'vue';
 import iView from 'iview';
 import VueRouter from 'vue-router';
 
+import * as filters from './filters' // 全局filter
+
 import Vuex from 'vuex';
 import Util from './libs/util';
 import App from './app.vue';
@@ -17,6 +19,11 @@ Vue.use(VueRouter);
 Vue.use(Vuex);
 Vue.use(VueI18n);
 Vue.use(iView);
+
+// register global utility filters.
+Object.keys(filters).forEach(key => {
+  Vue.filter(key, filters[key])
+})
 
 // 自动设置语言
 const navLang = navigator.language;

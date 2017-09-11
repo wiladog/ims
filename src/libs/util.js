@@ -10,13 +10,13 @@ util.title = function(title) {
 };
 
 const ajaxUrl = env === 'development' ?
-    'http://archives.edai.dev' :
+    '' :
     env === 'production' ?
-    'https://www.url.com' :
-    'https://debug.url.com';
+    'http://demo.jixinghai.com/yidaiwang/public/index.php/' :
+    'http://demo.jixinghai.com/yidaiwang/public/index.php/';
 
 util.ajax = axios.create({
-    // baseURL: ajaxUrl,
+    baseURL: ajaxUrl,
     timeout: 30000
 });
 

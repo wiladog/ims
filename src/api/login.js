@@ -10,7 +10,7 @@ export default {
   // captcha:this.loginData.captcha
   checkC (params, cb) {
 
-    Util.ajax.post('/api/login',{
+    Util.ajax.post('http://demo.jixinghai.com/yidaiwang/public/index.php/api/login',{
       params:params
     })
     .then(function(response) {
