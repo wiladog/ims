@@ -149,6 +149,10 @@
         <Row>
             <Col>
                 <Table :columns="columns" :data="record" ></Table>
+                <div style="margin-top: 5px;float: right;">
+                    <Page :total="recordTotal" @on-change="chagePage" show-total></Page>
+                </div>
+
             </Col>
         </Row>
 
@@ -169,16 +173,14 @@
                 <Option :value="usr.id" v-for="usr in user" :key="usr.id">{{ usr.name }}</Option>
             </Select>
     </Modal>
-
         <!-- <Table :columns="columns" :data="record"></Table> -->
-        
     </div>
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
     export default {
         created() {
-            this.$store.dispatch('getRecord',{});
+            this.$store.dispatch('getRecord',{type:'image',status:10});
             this.$store.dispatch('getProduct');
             this.$store.dispatch('getUsers');
         },
@@ -186,10 +188,15 @@ import { mapGetters, mapActions } from 'vuex'
             ...mapGetters({
                 record:'record',
                 product: 'product',
-                user:'user'
+                user:'user',
+                recordTotal:'recordTotal'
             })
         },
         methods: {
+            chagePage(page) {
+                // console.info(page);
+                this.$store.dispatch('getRecord',{type:'image',status:10,page:page});
+            },
             allocations(id) {
                 // console.info(this.allocation);
                 this.allocation = true;
@@ -270,8 +277,6 @@ import { mapGetters, mapActions } from 'vuex'
                     {
                         title: '档案编号',
                         key: 'profile_number',
-                        // fixed:'left'
-                        fixed: 'left'
                     },
                     {
                         title: '业务编号',

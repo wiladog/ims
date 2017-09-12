@@ -102,6 +102,20 @@ export function toThousandslsFilter(num) {
   return (+num || 0).toString().replace(/^-?\d+/g, m => m.replace(/(?=(?!\b)(\d{3})+$)/g, ','))
 }
 
+// export function productTypeFilter(num) {
+//       if(num == 10) {
+//         return '待分配';
+//       } else if(params.row.image_status == 20) {
+//           return '已分配';
+//       } else if(params.row.image_status == 30) {
+//           return '已审核';
+//       } else if(params.row.image_status == 40) {
+//           return '已归档';
+//       } else if(params.row.image_status == -10) {
+//           return '审核未通过';
+//       }
+//       return '未知';
+// }
 
 export function toBusinesStatusFilter(num) {
       if(num == 10) {

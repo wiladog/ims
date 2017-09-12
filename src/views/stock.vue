@@ -48,7 +48,7 @@
             <Col span="18" >
             <div class="tabone">
                      <a class="active" href="">
-                         <p class="taboneword1">5151</p>
+                         <p class="taboneword1">{{ recordTotal }}</p>
                          <p class="taboneword2">影像档案 </p>
                      </a>      
                      <a href="">
@@ -149,6 +149,9 @@
         <Row>
             <Col>
                 <Table :columns="columns" :data="record" ></Table>
+                <div style="margin-top: 5px;float: right;">
+                    <Page :total="recordTotal" @on-change="chagePage" show-total></Page>
+                </div>
             </Col>
         </Row>
 
@@ -186,10 +189,15 @@ import { mapGetters, mapActions } from 'vuex'
             ...mapGetters({
                 record:'record',
                 product: 'product',
-                user:'user'
+                user:'user',
+                recordTotal:'recordTotal'
             })
         },
         methods: {
+            chagePage(page) {
+                // console.info(page);
+                this.$store.dispatch('getRecord',{type:'image',page:page});
+            },
             allocations(id) {
                 // console.info(this.allocation);
                 this.allocation = true;
@@ -360,7 +368,7 @@ import { mapGetters, mapActions } from 'vuex'
                                     },
                                     on: {
                                         click: () => {
-                                            this.remove(params.index)
+                                            this.$router.push({path:'/show/record/'+params.row.id});
                                         }
                                     }
                                 }, '查看'),

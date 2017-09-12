@@ -3,15 +3,16 @@
 <template>
 	<div >
 		<Menu theme="dark" width="auto" @on-select="handleClick">
+      <Menu-item :name="item.path" v-for="item in items" v-if="!item.children">{{ item.meta.title }}</Menu-item>
       <Submenu name="1" v-for="item in items" v-if="item.children">
           <template slot="title">
               <Icon type="ios-paper"></Icon>
               {{ item.meta.title }}
           </template>
-          <MenuItem :name="its.path" v-for="its in item.children">{{ its.meta.title }}</MenuItem>
+          <MenuItem :name="its.path" v-for="its in item.children" v-if="its.meta.hidden != 1">{{ its.meta.title }} {{ its.meta.hidden }}</MenuItem>
           
       </Submenu>
-      <Menu-item :name="item.path" v-for="item in items" v-if="!item.children">{{ item.meta.title }}</Menu-item>
+      
     </Menu>
 	</div>
 </template>

@@ -31,6 +31,16 @@
 .taboneword1{font-size:14px;}
 .taboneword2{font-size:12px;}
 
+
+.vertical-center-modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .ivu-modal{
+        top: 0;
+    }
+}
+
 </style>
 <template>
     <div >
@@ -38,8 +48,8 @@
             <Col span="18" >
             <div class="tabone">
                      <a class="active" href="">
-                         <p class="taboneword1">5151</p>
-                         <p class="taboneword2">影像档案</p>
+                         <p class="taboneword1">{{ recordTotal }}</p>
+                         <p class="taboneword2">影像档案 </p>
                      </a>      
                      <a href="">
                         <p>5151</p>
@@ -68,30 +78,32 @@
         </FormItem>
         <FormItem >
             <Select  placeholder="数据来源">
-                <Option value="beijing">北京市</Option>
-                <Option value="shanghai">上海市</Option>
-                <Option value="shenzhen">深圳市</Option>
+                <Option value="beijing">录入</Option>
+                <Option value="shanghai">导入</Option>
             </Select>
         </FormItem>
         <FormItem >
             <Select  placeholder="区域">
-                <Option value="beijing">北京市</Option>
-                <Option value="shanghai">上海市</Option>
+                <Option value="beijing">成都</Option>
+                <Option value="shanghai">高新区</Option>
                 <Option value="shenzhen">深圳市</Option>
             </Select>
         </FormItem>
         <FormItem >
-            <Select  placeholder="产品类型">
-                <Option value="beijing">北京市</Option>
-                <Option value="shanghai">上海市</Option>
-                <Option value="shenzhen">深圳市</Option>
+            <Select  placeholder="产品类型" style="width:100px">
+                <Option value="">请选择</Option>
+                <Option v-for="item in product" :value="item.id" :key="item.value">{{ item.name }}</Option>
             </Select>
         </FormItem>
-        <FormItem >
-            <Select  placeholder="档案状态">
-                <Option value="beijing">北京市</Option>
-                <Option value="shanghai">上海市</Option>
-                <Option value="shenzhen">深圳市</Option>
+
+                <FormItem >
+            <Select  placeholder="结清状态" style="width:100px">
+                <Option value="">请选择</Option>
+                <Option value="10">待分配</Option>
+                <Option value="20">已分配</Option>
+                <Option value="30">已审核</Option>
+                <Option value="40">已归档</Option>
+                <Option value="-10">审核未通过</Option>
             </Select>
         </FormItem>
         <FormItem >
@@ -137,9 +149,42 @@
         <Row>
             <Col>
                 <Table :columns="columns" :data="record" ></Table>
+                <div style="margin-top: 5px;float: right;">
+                    <Page :total="recordTotal" @on-change="chagePage" show-total></Page>
+                </div>
             </Col>
         </Row>
 
+        <Modal
+        title="审核"
+        v-model="allocation"
+        ok-text="确认"
+        :loading="loading"
+        @on-ok="allocationsOk"
+        class-name="vertical-center-modal">
+            <Form :model="formItem" :label-width="80">
+                <FormItem label="审核结果">
+                    <RadioGroup v-model="auditData.is_pass" type="button">
+                        <Radio label="通过"></Radio>
+                        <Radio label="不通过"></Radio>
+                    </RadioGroup>
+                </FormItem>
+                <FormItem label="原因" v-show="auditData.is_pass == '不通过'">
+                    <RadioGroup v-model="auditData.reason" vertical>
+                        <Radio :label="reason" v-for="reason in reasons">
+                            <span>{{ reason }}</span>
+                        </Radio>
+                    </RadioGroup>
+                </FormItem>
+                <FormItem label="其他原因" v-model="auditData.otherReason" v-show="auditData.is_pass == '不通过'">
+                    <Input  type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入..."></Input>
+                </FormItem>
+            </Form>
+            <div slot="footer">
+                <Button type="text" @click="cancel">取消</Button>
+                <Button type="primary" @click="allocationsOk">确认</Button>
+            </div>
+    </Modal>
         <!-- <Table :columns="columns" :data="record"></Table> -->
         
     </div>
@@ -148,15 +193,109 @@
 import { mapGetters, mapActions } from 'vuex'
     export default {
         created() {
-            this.$store.dispatch('getRecord',{});
+            this.$store.dispatch('getRecord',{type:'image',status:30});
+            this.$store.dispatch('getProduct');
         },
         computed: {
             ...mapGetters({
                 record:'record',
+                product: 'product',
+                recordTotal:'recordTotal',
             })
         },
+        methods: {
+            chagePage(page) {
+                // console.info(page);
+                this.$store.dispatch('getRecord',{type:'image',status:30,page:page});
+            },
+            cancel(){
+                this.allocation=false;
+            },
+            allocations(id) {
+                // console.info(this.allocation);
+                this.allocation = true;
+                this.auditData.id = id;
+            },
+            allocationsOk() {
+                
+                if(this.auditData.is_pass == '') {
+                    this.$Message.warning('请选选择审核结果!');
+                    setTimeout(()=>{
+                        this.loading = false;
+                    }, 1000);
+                    this.loading = true;
+                    this.allocation = true;
+                    return false;
+                } else {
+                    console.info(this.auditData);
+                    this.$store.dispatch('audit', this.auditData).then(()=>{
+                        // window.location.reload();
+                        // this.$Message.success('分配成功!');
+                    });
+                }
+                // console.info(this.allocationData);
+                // this.$store.dispatch('allocation',this.allocationData).then(()=>{
+                //     this.$Message.success('分配成功!');
+                    
+                //     setTimeout(() => {
+                //             window.location.reload();
+                //         }, 2000);
+                // });
+            },
+            getProductType(proId) {
+                for(let i=0;i<this.product.length;i++) {
+                    if(this.product[i].id == proId) {
+                        return this.product[i].name;
+                        break;
+                    }
+                }
+            },
+            getStatus(status) {
+                if(status == 10) {
+                    return '待分配';
+                } else if(status == 20) {
+                    return '已分配';
+                } else if(status == 30) {
+                    return '已审核';
+                } else if(status == 40) {
+                    return '已归档';
+                } else if(status == -10) {
+                    return '审核未通过';
+                }
+            },
+            addBusiness() {
+                this.$router.push({path:'/stock/add'});
+            },
+            handleSubmit(name) {
+                this.$refs[name].validate((valid) => {
+                    if (valid) {
+                        this.$Message.success('提交成功!');
+                    } else {
+                        this.$Message.error('表单验证失败!');
+                    }
+                })
+            }
+        },
+
         data() {
             return {
+                reasons:[
+                    '不通过原因一',
+                    '不通过原因二',
+                    '不通过原因三',
+                    '不通过原因四',
+                ],
+                loading:true,
+                auditData:{
+                    is_pass:'',
+                    reason:'',
+                    otherReason:'',
+                },
+                allocationData:{
+                    manager_id:'',
+                    id:'',
+                },
+                allocation:false,
                 formInline: {
                     user: '',
                     password: ''
@@ -180,8 +319,6 @@ import { mapGetters, mapActions } from 'vuex'
                     {
                         title: '档案编号',
                         key: 'profile_number',
-                        // fixed:'left'
-                        fixed: 'left'
                     },
                     {
                         title: '业务编号',
@@ -203,7 +340,10 @@ import { mapGetters, mapActions } from 'vuex'
                     },
                     {
                         title: '产品类型',
-                        key: 'address4'
+                        key: 'product_id',
+                        render: (h, params) => {
+                            return this.getProductType(params.row.product_id);
+                        }
                     },
                     {
                         title: '借款日期',
@@ -214,12 +354,15 @@ import { mapGetters, mapActions } from 'vuex'
                         key: 'borrowing_time'
                     },
                     {
-                        title: '档案状态',
-                        key: 'address7'
+                        title: '结清状态',
+                        key: 'image_status',
+                        render: (h, params) => {
+                            return this.getStatus(params.row.image_status);
+                        }
                     },
                     {
                         title: '提交日期',
-                        key: 'date8'
+                        key: 'create_time'
                     },
                     {
                         title: '分配日期',
@@ -264,7 +407,7 @@ import { mapGetters, mapActions } from 'vuex'
                                     },
                                     on: {
                                         click: () => {
-                                            this.remove(params.index)
+                                            this.$router.push({path:'/show/record/'+params.row.id});
                                         }
                                     }
                                 }, '查看'),
@@ -275,7 +418,20 @@ import { mapGetters, mapActions } from 'vuex'
                                     },
                                     on: {
                                         click: () => {
-                                            this.remove(params.index)
+                                            // this.allocations(params.row.id)
+                                            this.$router.push({path:'/archiving/'+params.row.id})
+                                        }
+                                    }
+                                }, '归档'),
+                                h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            console.info(params.row.id);
+                                            this.remove(params.row.id)
                                         }
                                     }
                                 }, '补充资料')
@@ -296,24 +452,11 @@ import { mapGetters, mapActions } from 'vuex'
                     time: '',
                     slider: [20, 50],
                     textarea: '',
+                    tmpSattus:10,
                     
                     siderNavHeight: document.documentElement.clientHeight - 104
                 }
             }
         },
-        methods: {
-            addBusiness() {
-                this.$router.push({path:'/stock/add'});
-            },
-            handleSubmit(name) {
-                this.$refs[name].validate((valid) => {
-                    if (valid) {
-                        this.$Message.success('提交成功!');
-                    } else {
-                        this.$Message.error('表单验证失败!');
-                    }
-                })
-            }
-        }
     };
 </script>

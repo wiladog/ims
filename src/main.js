@@ -8,6 +8,8 @@ import Vuex from 'vuex';
 import Util from './libs/util';
 import App from './app.vue';
 import 'iview/dist/styles/iview.css';
+// import '../assets/css/bootstrap.min.css';
+// import './assets/css/bootstrap.min.css';
 
 import VueI18n from 'vue-i18n';
 import StoreConstructorOptions from './store';

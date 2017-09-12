@@ -20,9 +20,6 @@
             text-align: center;
             border-radius: 3px;
             // flex: 1;
-
-            
-            
             .login-header {
                 display: flex;
                 
@@ -111,8 +108,8 @@
             <div class="login-contents">
                 <div class="login-form" v-show="headers.title == '密码'">
                     <Form :model="loginData"  :rules="ruleValidate" ref="formLogin" >
-                    <Form-item prop="email">
-                        <Input type="text" v-model="loginData.email" placeholder="账号" @on-enter="handleSubmit('formLogin')">
+                    <Form-item prop="username">
+                        <Input type="text" v-model="loginData.username" placeholder="账号" @on-enter="handleSubmit('formLogin')">
                             <Icon type="ios-person-outline"  slot="prepend" class="icon"></Icon>
                         </Input>
                     </Form-item>
@@ -173,7 +170,7 @@ import { mapGetters, mapActions } from 'vuex'
         data () {
             return {
                 loginData: {
-                      email:'imya@163.com',
+                      username:'imya',
                       password:'0.1234',
                       captcha:''
                   },
@@ -206,7 +203,6 @@ import { mapGetters, mapActions } from 'vuex'
                 }
             }
         },
-        
         computed: {
             ...mapGetters({
                 is_vailed:'is_vailed',

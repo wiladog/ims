@@ -48,7 +48,7 @@
             <Col span="18" >
             <div class="tabone">
                      <a class="active" href="">
-                         <p class="taboneword1">5151</p>
+                         <p class="taboneword1">{{ recordTotal }}</p>
                          <p class="taboneword2">影像档案 </p>
                      </a>      
                      <a href="">
@@ -149,27 +149,42 @@
         <Row>
             <Col>
                 <Table :columns="columns" :data="record" ></Table>
+                <div style="margin-top: 5px;float: right;">
+                    <Page :total="recordTotal" @on-change="chagePage" show-total></Page>
+                </div>
             </Col>
         </Row>
 
         <Modal
-        title="分配审核员"
+        title="审核"
         v-model="allocation"
-        ok-text="分配"
+        ok-text="确认"
+        :loading="loading"
         @on-ok="allocationsOk"
         class-name="vertical-center-modal">
-        
-            <Select  placeholder="组别">
-                <Option value="beijing">审核组一</Option>
-                <Option value="shanghai">审核组二</Option>
-                <Option value="shenzhen">审核组三</Option>
-            </Select>
-            <div style="height: 10px;"></div>
-            <Select  placeholder="审核员" v-model="allocationData.manager_id">
-                <Option :value="usr.id" v-for="usr in user" :key="usr.id">{{ usr.name }}</Option>
-            </Select>
+            <Form :model="formItem" :label-width="80">
+                <FormItem label="审核结果">
+                    <RadioGroup v-model="auditData.is_pass" type="button">
+                        <Radio label="通过"></Radio>
+                        <Radio label="不通过"></Radio>
+                    </RadioGroup>
+                </FormItem>
+                <FormItem label="原因" v-show="auditData.is_pass == '不通过'">
+                    <RadioGroup v-model="auditData.reason" vertical>
+                        <Radio :label="reason" v-for="reason in reasons">
+                            <span>{{ reason }}</span>
+                        </Radio>
+                    </RadioGroup>
+                </FormItem>
+                <FormItem label="其他原因" v-model="auditData.otherReason" v-show="auditData.is_pass == '不通过'">
+                    <Input  type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入..."></Input>
+                </FormItem>
+            </Form>
+            <div slot="footer">
+                <Button type="text" @click="cancel">取消</Button>
+                <Button type="primary" @click="allocationsOk">确认</Button>
+            </div>
     </Modal>
-
         <!-- <Table :columns="columns" :data="record"></Table> -->
         
     </div>
@@ -178,32 +193,54 @@
 import { mapGetters, mapActions } from 'vuex'
     export default {
         created() {
-            this.$store.dispatch('getRecord',{});
+            this.$store.dispatch('getRecord',{type:'image',status:20});
             this.$store.dispatch('getProduct');
-            this.$store.dispatch('getUsers');
         },
         computed: {
             ...mapGetters({
                 record:'record',
                 product: 'product',
-                user:'user'
+                recordTotal:'recordTotal',
             })
         },
         methods: {
+            chagePage(page) {
+                // console.info(page);
+                this.$store.dispatch('getRecord',{type:'image',status:20,page:page});
+            },
+            cancel(){
+                this.allocation=false;
+            },
             allocations(id) {
                 // console.info(this.allocation);
                 this.allocation = true;
-                this.allocationData.id = id;
+                this.auditData.id = id;
             },
             allocationsOk() {
+                
+                if(this.auditData.is_pass == '') {
+                    this.$Message.warning('请选选择审核结果!');
+                    setTimeout(()=>{
+                        this.loading = false;
+                    }, 1000);
+                    this.loading = true;
+                    this.allocation = true;
+                    return false;
+                } else {
+                    console.info(this.auditData);
+                    this.$store.dispatch('audit', this.auditData).then(()=>{
+                        // window.location.reload();
+                        // this.$Message.success('分配成功!');
+                    });
+                }
                 // console.info(this.allocationData);
-                this.$store.dispatch('allocation',this.allocationData).then(()=>{
-                    this.$Message.success('分配成功!');
+                // this.$store.dispatch('allocation',this.allocationData).then(()=>{
+                //     this.$Message.success('分配成功!');
                     
-                    setTimeout(() => {
-                            window.location.reload();
-                        }, 2000);
-                });
+                //     setTimeout(() => {
+                //             window.location.reload();
+                //         }, 2000);
+                // });
             },
             getProductType(proId) {
                 for(let i=0;i<this.product.length;i++) {
@@ -242,6 +279,18 @@ import { mapGetters, mapActions } from 'vuex'
 
         data() {
             return {
+                reasons:[
+                    '不通过原因一',
+                    '不通过原因二',
+                    '不通过原因三',
+                    '不通过原因四',
+                ],
+                loading:true,
+                auditData:{
+                    is_pass:'',
+                    reason:'',
+                    otherReason:'',
+                },
                 allocationData:{
                     manager_id:'',
                     id:'',
@@ -270,8 +319,6 @@ import { mapGetters, mapActions } from 'vuex'
                     {
                         title: '档案编号',
                         key: 'profile_number',
-                        // fixed:'left'
-                        fixed: 'left'
                     },
                     {
                         title: '业务编号',
@@ -360,7 +407,7 @@ import { mapGetters, mapActions } from 'vuex'
                                     },
                                     on: {
                                         click: () => {
-                                            this.remove(params.index)
+                                            this.$router.push({path:'/show/record/'+params.row.id});
                                         }
                                     }
                                 }, '查看'),
