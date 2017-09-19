@@ -22,7 +22,6 @@
         text-align: center; margin-right: 10px;color: #7A7A7A;width: 100px;padding: 4px 0;display: inline-block;background: #E6E6E6;border-radius: 2.94px 2.94px 0 0;-webkit-border-radius: 2.94px 2.94px 0 0;-moz-border-radius: 2.94px 2.94px 0 0;
         
     }
-
     .active {
             background: #26B9CE;color: #fff;
     }
@@ -44,143 +43,32 @@
 </style>
 <template>
     <div >
-        <Row style="margin-bottom: 10px;">
-            <Col span="18" >
-            <div class="tabone">
-                     <a class="active" href="">
-                         <p class="taboneword1">5151</p>
-                         <p class="taboneword2">影像档案 </p>
-                     </a>  
-                     <router-link to="/stock/paper/10">
-                        <p>1</p>
-                        <p>纸质档案</p>
-                     </router-link>    
-                </div>
-           
-            </Col>
-            <Col span="6" style="text-align: right;">
-                <Button class="add-btn" @click="addBusiness" >
-                    <Icon type="plus-round"></Icon>&nbsp;添加档案
-                </Button>
-            </Col>
-        </Row>
-
-        <div>
-            <Form ref="formInline" :model="formInline"  inline>
-        <FormItem prop="user">
-            <Input type="text" v-model="formInline.user" placeholder="输入检索信息">
-                
-            </Input>
-        </FormItem>
-        <FormItem>
-        <!-- #26B9CE -->
-            <Button type="success" class="c-btn" @click="handleSubmit('formInline')">搜索</Button>
-        </FormItem>
-        <FormItem >
-            <Select  placeholder="数据来源">
-                <Option value="beijing">录入</Option>
-                <Option value="shanghai">导入</Option>
-            </Select>
-        </FormItem>
-        <FormItem >
-            <Select  placeholder="区域">
-                <Option value="beijing">成都</Option>
-                <Option value="shanghai">高新区</Option>
-                <Option value="shenzhen">深圳市</Option>
-            </Select>
-        </FormItem>
-        <FormItem >
-            <Select  placeholder="产品类型" style="width:100px">
-                <Option value="">请选择</Option>
-                <Option v-for="item in product" :value="item.id" :key="item.value">{{ item.name }}</Option>
-            </Select>
-        </FormItem>
-
+        <div style="margin-bottom: 10px;">
+            <Form ref="formInline" :model="applyForm"  inline>
                 <FormItem >
-            <Select  placeholder="结清状态" style="width:100px">
-                <Option value="">请选择</Option>
-                <Option value="10">待分配</Option>
-                <Option value="20">已分配</Option>
-                <Option value="30">已审核</Option>
-                <Option value="40">已归档</Option>
-                <Option value="-10">审核未通过</Option>
-            </Select>
-        </FormItem>
-        <FormItem >
-            <Select  placeholder="借款状态">
-                <Option value="beijing">北京市</Option>
-                <Option value="shanghai">上海市</Option>
-                <Option value="shenzhen">深圳市</Option>
-            </Select>
-        </FormItem>
+                    <Input type="text" v-model="applyForm.customer_name" style="width:200px;" placeholder="借款人姓名"></Input>
+                </FormItem>
+                <FormItem >
+                    <Input type="text" v-model="applyForm.number" style="width:200px;" placeholder="业务编号"></Input>
+                </FormItem>
+                <FormItem >
+                    <Input type="text" v-model="applyForm.customer_id_number" style="width:200px;" placeholder="身份证号"></Input>
+                </FormItem>
+
+                <FormItem>
+                    <Button type="success" class="c-btn" @click="applyNextStep">下一步</Button>
+                </FormItem>
             </Form>
-    <Form ref="formInline" :model="formInline" :rules="ruleInline" inline>
-        
-        <FormItem>
-            <Button type="success" class="b-btn" @click="handleSubmit('formInline')">提交日期</Button>
-        </FormItem>
-        <FormItem >
-            <DatePicker type="daterange" placement="bottom-end" placeholder="选择日期" style="width: 180px"></DatePicker>
-        </FormItem>
 
-        <FormItem>
-            <Button type="success" class="b-btn" >分配日期</Button>
-        </FormItem>
-        <FormItem >
-            <DatePicker type="daterange" placement="bottom-end" placeholder="选择日期" style="width: 180px"></DatePicker>
-        </FormItem>
-
-        <FormItem>
-            <Button type="success" class="b-btn" >审核通过日期</Button>
-        </FormItem>
-        <FormItem >
-            <DatePicker type="daterange" placement="bottom-end" placeholder="选择日期" style="width: 180px"></DatePicker>
-        </FormItem>
-
-        <FormItem>
-            <Button type="success" class="b-btn" >归档日期</Button>
-        </FormItem>
-        <FormItem >
-            <DatePicker type="daterange" placement="bottom-end" placeholder="选择日期" style="width: 180px"></DatePicker>
-        </FormItem> 
-        
-    </Form>
+            {{ applyForm }}
         </div>
-        <Row>
-            <Col>
-                <Table :columns="columns" :data="record" ></Table>
-                <div style="margin-top: 5px;float: right;">
-                    <Page :total="recordTotal" @on-change="chagePage" show-total></Page>
-                </div>
-
-            </Col>
-        </Row>
-
-        <Modal
-        title="分配审核员"
-        v-model="allocation"
-        ok-text="分配"
-        @on-ok="allocationsOk"
-        class-name="vertical-center-modal">
-        
-            <Select  placeholder="组别">
-                <Option value="beijing">审核组一</Option>
-                <Option value="shanghai">审核组二</Option>
-                <Option value="shenzhen">审核组三</Option>
-            </Select>
-            <div style="height: 10px;"></div>
-            <Select  placeholder="审核员" v-model="allocationData.manager_id">
-                <Option :value="usr.id" v-for="usr in user" :key="usr.id">{{ usr.name }}</Option>
-            </Select>
-    </Modal>
-        <!-- <Table :columns="columns" :data="record"></Table> -->
     </div>
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
     export default {
         created() {
-            this.$store.dispatch('getRecord',{type:'image',status:10});
+            this.$store.dispatch('getRecord',{});
             this.$store.dispatch('getProduct');
             this.$store.dispatch('getUsers');
         },
@@ -195,7 +83,7 @@ import { mapGetters, mapActions } from 'vuex'
         methods: {
             chagePage(page) {
                 // console.info(page);
-                this.$store.dispatch('getRecord',{type:'image',status:10,page:page});
+                this.$store.dispatch('getRecord',{type:'image',page:page});
             },
             allocations(id) {
                 // console.info(this.allocation);
@@ -236,14 +124,8 @@ import { mapGetters, mapActions } from 'vuex'
             addBusiness() {
                 this.$router.push({path:'/stock/add'});
             },
-            handleSubmit(name) {
-                this.$refs[name].validate((valid) => {
-                    if (valid) {
-                        this.$Message.success('提交成功!');
-                    } else {
-                        this.$Message.error('表单验证失败!');
-                    }
-                })
+            applyNextStep() {
+                this.$router.push({path:'/outbound/searchList',query:this.applyForm})
             }
         },
 
@@ -267,13 +149,20 @@ import { mapGetters, mapActions } from 'vuex'
                         { type: 'string', min: 6, message: '密码长度不能小于6位', trigger: 'blur' }
                     ]
                 },
-                formSearch:{
-                    title:'',
-                    article_categories_id:''
+                applyForm:{
+                    customer_name:'',
+                    number:'',
+                    customer_id_number:'',
+                    status: 40,
                 },
                 
                 total:100,
                 columns: [
+                    {
+                        title: '借款人姓名',
+                        key: 'customer_name'
+                    },
+
                     {
                         title: '档案编号',
                         key: 'profile_number',
@@ -281,10 +170,6 @@ import { mapGetters, mapActions } from 'vuex'
                     {
                         title: '业务编号',
                         key: 'number'
-                    },
-                    {
-                        title: '借款人姓名',
-                        key: 'customer_name'
                     },
                     {
                         title: '身份证号',
@@ -311,27 +196,28 @@ import { mapGetters, mapActions } from 'vuex'
                         title: '借款期限',
                         key: 'borrowing_time'
                     },
+                    
                     {
-                        title: '结清状态',
+                        title: '出库类型',
+                        key: 'create_time'
+                    },
+                    {
+                        title: '状态',
                         key: 'image_status',
                         render: (h, params) => {
                             return this.getStatus(params.row.image_status);
                         }
                     },
                     {
-                        title: '提交日期',
-                        key: 'create_time'
-                    },
-                    {
-                        title: '分配日期',
+                        title: '预计归还日期',
                         key: 'date9'
                     },
                     {
-                        title: '审核通过日期',
+                        title: '归还日期',
                         key: 'date10'
                     },
                     {
-                        title: '归档日期',
+                        title: '审核日期',
                         key: 'date11',
                         // fixed: 'right',
                     },
@@ -365,7 +251,7 @@ import { mapGetters, mapActions } from 'vuex'
                                     },
                                     on: {
                                         click: () => {
-                                            this.remove(params.index)
+                                            this.$router.push({path:'/show/record/'+params.row.id});
                                         }
                                     }
                                 }, '查看'),

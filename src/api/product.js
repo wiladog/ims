@@ -8,7 +8,21 @@ export default {
   
 
 
+saveParams(params) {
+  return Util.ajax({
+    method:'post',
+    url:'api/product/params/save',
+    data:params
+  });
+},
 
+saveFiles(params) {
+  return Util.ajax({
+    method:'post',
+    url:'api/product/params/savefiles',
+    data:params
+  });
+},
   
   getProduct (params) {
     return Util.ajax({
@@ -39,6 +53,22 @@ export default {
       method: 'delete',
       url: '/api/product/' + params.id,
       data: params
+    });
+  },
+
+  getProductParams (params) {
+    return Util.ajax({
+      method: 'post',
+      url: '/api/product/params',
+      data: params
+    });
+  },
+
+  getproductFiles(params) {
+    return Util.ajax({
+      method:'post',
+      url: '/api/product/getproductFiles',
+      data:params
     });
   },
 

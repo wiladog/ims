@@ -45,21 +45,22 @@
 <template>
     <div >
         <Row style="margin-bottom: 10px;">
-            <Col span="18" >
+            <Col span="16" >
             <div class="tabone">
-                     <a class="active" href="">
-                         <p class="taboneword1">5151</p>
+                    <router-link to="/stock">
+                         <p class="taboneword1">{{ recordTotal }}</p>
                          <p class="taboneword2">影像档案 </p>
-                     </a>  
-                     <router-link to="/stock/paper/10">
-                        <p>1</p>
-                        <p>纸质档案</p>
                      </router-link>    
+                     <a  class="active">
+                        <p>{{ profileTotal }}</p>
+                        <p>纸质档案</p>
+                     </a>                   
                 </div>
            
             </Col>
-            <Col span="6" style="text-align: right;">
-                <Button class="add-btn" @click="addBusiness" >
+            <Col span="8" style="text-align: right;">
+                <Input v-model="number" placeholder="输入业务编号添加纸质档案" style="width: 160px"></Input>
+                <Button class="add-btn" @click="searchNumber" >
                     <Icon type="plus-round"></Icon>&nbsp;添加档案
                 </Button>
             </Col>
@@ -148,21 +149,19 @@
         </div>
         <Row>
             <Col>
-                <Table :columns="columns" :data="record" ></Table>
+                <Table :columns="columns" :data="profileList" ></Table>
                 <div style="margin-top: 5px;float: right;">
-                    <Page :total="recordTotal" @on-change="chagePage" show-total></Page>
+                    <Page :total="profileTotal" @on-change="chagePage" show-total></Page>
                 </div>
-
             </Col>
         </Row>
 
         <Modal
-        title="分配审核员"
-        v-model="allocation"
-        ok-text="分配"
-        @on-ok="allocationsOk"
-        class-name="vertical-center-modal">
-        
+            title="纸质档案分配"
+            v-model="allocation"
+            ok-text="分配"
+            @on-ok="allocationsOk"
+            class-name="vertical-center-modal">
             <Select  placeholder="组别">
                 <Option value="beijing">审核组一</Option>
                 <Option value="shanghai">审核组二</Option>
@@ -172,15 +171,51 @@
             <Select  placeholder="审核员" v-model="allocationData.manager_id">
                 <Option :value="usr.id" v-for="usr in user" :key="usr.id">{{ usr.name }}</Option>
             </Select>
-    </Modal>
-        <!-- <Table :columns="columns" :data="record"></Table> -->
+        </Modal>
+
+        <Modal
+            title="审核"
+            v-model="auditShow"
+            ok-text="确认"
+            :loading="loading"
+            class-name="vertical-center-modal">
+            <Form  :label-width="80">
+                <FormItem label="审核结果">
+                    <RadioGroup v-model="auditData.is_pass" type="button">
+                        <Radio label="通过"></Radio>
+                        <Radio label="不通过"></Radio>
+                    </RadioGroup>
+                </FormItem>
+                <FormItem label="原因" v-show="auditData.is_pass == '不通过'">
+                    <RadioGroup v-model="auditData.reason" vertical>
+                        <Radio :label="reason" v-for="reason in reasons">
+                            <span>{{ reason }}</span>
+                        </Radio>
+                    </RadioGroup>
+                </FormItem>
+                <FormItem label="其他原因" v-model="auditData.otherReason" v-show="auditData.is_pass == '不通过'">
+                    <Input  type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入..."></Input>
+                </FormItem>
+            </Form>
+            <div slot="footer">
+                <Button type="text" @click="cancel">取消</Button>
+                <Button type="primary" @click="auditOk">确认</Button>
+            </div>
+        </Modal>
+
+       
     </div>
 </template>
 <script>
 import { mapGetters, mapActions } from 'vuex'
     export default {
         created() {
-            this.$store.dispatch('getRecord',{type:'image',status:10});
+            // console.info(this.$route.params);
+            let params = {};
+            if(this.$route.params.status != 0) {
+                params.status = this.$route.params.status;
+            }
+            this.$store.dispatch('profileList', params);
             this.$store.dispatch('getProduct');
             this.$store.dispatch('getUsers');
         },
@@ -189,28 +224,64 @@ import { mapGetters, mapActions } from 'vuex'
                 record:'record',
                 product: 'product',
                 user:'user',
-                recordTotal:'recordTotal'
+                recordTotal:'recordTotal',
+                profileList:'profileList',
+                profileTotal:'profileTotal',
             })
         },
         methods: {
+            cancel(){
+                this.auditShow=false;
+            },
             chagePage(page) {
-                // console.info(page);
-                this.$store.dispatch('getRecord',{type:'image',status:10,page:page});
+                this.$store.dispatch('profileList',{type:'image',page:page});
             },
             allocations(id) {
-                // console.info(this.allocation);
                 this.allocation = true;
                 this.allocationData.id = id;
             },
             allocationsOk() {
-                // console.info(this.allocationData);
                 this.$store.dispatch('allocation',this.allocationData).then(()=>{
                     this.$Message.success('分配成功!');
-                    
                     setTimeout(() => {
-                            window.location.reload();
+                            // window.location.reload();
                         }, 2000);
                 });
+            },
+
+            auditOk() {
+                
+                if(this.auditData.is_pass == '') {
+                    this.$Message.warning('请选选择审核结果!');
+                    setTimeout(()=>{
+                        this.loading = false;
+                    }, 1000);
+                    this.loading = true;
+                    this.allocation = true;
+                    return false;
+                } else {
+                    console.info(this.auditData);
+                    this.$store.dispatch('audit', this.auditData).then(()=>{
+                    });
+                }
+            },
+            
+            searchNumber() {
+                if(!this.number) {
+                    this.$Message.error('请输入业务编号');
+                    return false;
+                }
+                this.$store.dispatch('searchNumber',{number:this.number}).then((rsp)=>{
+                    if(rsp) {
+                        if(rsp.profile_number) {
+                            this.$router.push({name:'paper_add',params:rsp});
+                        } else {
+                            this.$Message.error('没有档案编号，不能添加或补充纸质');
+                        }
+                    } else {
+                        this.$Message.error('没有查找到业务');
+                    }
+                }); 
             },
             getProductType(proId) {
                 for(let i=0;i<this.product.length;i++) {
@@ -221,20 +292,38 @@ import { mapGetters, mapActions } from 'vuex'
                 }
             },
             getStatus(status) {
+                let statusAndBtnTxt = {
+                    statusTxt:'待分配',
+                    btnTxt:'分配'
+                };
                 if(status == 10) {
-                    return '待分配';
+                    statusAndBtnTxt.statusTxt = '待分配';
+                    statusAndBtnTxt.btnTxt = '分配';
                 } else if(status == 20) {
-                    return '已分配';
+                    statusAndBtnTxt.statusTxt = '已分配';
+                    statusAndBtnTxt.btnTxt = '审核';
                 } else if(status == 30) {
-                    return '已审核';
+                    statusAndBtnTxt.statusTxt = '已审核';
+                    statusAndBtnTxt.btnTxt = '归档';
                 } else if(status == 40) {
-                    return '已归档';
+                    statusAndBtnTxt.statusTxt = '已归档';
+                    statusAndBtnTxt.btnTxt = '';
                 } else if(status == -10) {
-                    return '审核未通过';
+                    statusAndBtnTxt.statusTxt = '待分配';
+                    statusAndBtnTxt.btnTxt = '分配';
                 }
+                return statusAndBtnTxt;
+            },
+            audit(id) {
+                this.auditShow = true;
+                this.auditData.id = id;
+            },
+            archive(id,profile_number) {
+                this.$router.push({name:'paper_archive',params:{id:id,number:profile_number}})
             },
             addBusiness() {
-                this.$router.push({path:'/stock/add'});
+                this.is_add_paper = true;
+                // this.$router.push({name:'paper_add'});
             },
             handleSubmit(name) {
                 this.$refs[name].validate((valid) => {
@@ -244,16 +333,49 @@ import { mapGetters, mapActions } from 'vuex'
                         this.$Message.error('表单验证失败!');
                     }
                 })
+            },
+            actions(row) {
+                // console.info(row);
+                if(row.paper_status == 10) {
+                    this.allocations(row.id);
+                } else if(row.paper_status == 20) {
+                    this.audit(row.id);
+                } else if(row.paper_status == 30) {
+                    this.archive(row.id, row.number);
+                } else if(row.paper_status == 40) {
+                    this.allocations(row.id);
+                } else {
+                    this.allocations(row.id)
+                }
+                
             }
         },
 
         data() {
             return {
+                reasons:[
+                    '不通过原因一',
+                    '不通过原因二',
+                    '不通过原因三',
+                    '不通过原因四',
+                ],
+                loading:true,
+                auditData:{
+                    is_pass:'',
+                    reason:'',
+                    otherReason:'',
+                    id:'',
+                    type:2,
+                },
+                auditShow:false,
+                allocation:false,
                 allocationData:{
                     manager_id:'',
                     id:'',
+                    type:2,
                 },
-                allocation:false,
+                number:'123456',
+                is_add_paper:false,
                 formInline: {
                     user: '',
                     password: ''
@@ -276,10 +398,6 @@ import { mapGetters, mapActions } from 'vuex'
                 columns: [
                     {
                         title: '档案编号',
-                        key: 'profile_number',
-                    },
-                    {
-                        title: '业务编号',
                         key: 'number'
                     },
                     {
@@ -313,9 +431,9 @@ import { mapGetters, mapActions } from 'vuex'
                     },
                     {
                         title: '结清状态',
-                        key: 'image_status',
+                        key: 'paper_status',
                         render: (h, params) => {
-                            return this.getStatus(params.row.image_status);
+                            return this.getStatus(params.row.paper_status).statusTxt
                         }
                     },
                     {
@@ -324,18 +442,16 @@ import { mapGetters, mapActions } from 'vuex'
                     },
                     {
                         title: '分配日期',
-                        key: 'date9'
+                        key: 'paper_distribute_time'
                     },
                     {
                         title: '审核通过日期',
-                        key: 'date10'
+                        key: 'paper_audit_time'
                     },
                     {
                         title: '归档日期',
-                        key: 'date11',
-                        // fixed: 'right',
+                        key: 'paper_archive_time',
                     },
-                    
                     {
                         title: '操作',
                         key: 'acs',
@@ -343,6 +459,7 @@ import { mapGetters, mapActions } from 'vuex'
                         fixed: 'right',
                         align: 'center',
                         render: (h, params) => {
+
                             return h('div', [
                                 h('Button', {
                                     props: {
@@ -365,7 +482,7 @@ import { mapGetters, mapActions } from 'vuex'
                                     },
                                     on: {
                                         click: () => {
-                                            this.remove(params.index)
+                                            this.$router.push({path:'/show/record/'+params.row.id});
                                         }
                                     }
                                 }, '查看'),
@@ -376,10 +493,10 @@ import { mapGetters, mapActions } from 'vuex'
                                     },
                                     on: {
                                         click: () => {
-                                            this.allocations(params.row.id)
+                                            this.actions(params.row);
                                         }
                                     }
-                                }, '分配'),
+                                }, this.getStatus(params.row.paper_status).btnTxt),
                                 h('Button', {
                                     props: {
                                         type: 'text',

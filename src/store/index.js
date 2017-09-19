@@ -12,6 +12,8 @@ import permissions from './modules/permissions'
 
 const debug = process.env.NODE_ENV !== 'production'
 
+console.info(debug);
+
 const StoreConstructorOptions = {
 	actions,
   	getters,
@@ -23,7 +25,7 @@ const StoreConstructorOptions = {
       product,
       permissions
   	},
-  	strict: debug,
+  	strict: false,
   	plugins: []
   	// plugins: debug ? [createLogger()] : []
 

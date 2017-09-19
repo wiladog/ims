@@ -50,11 +50,11 @@
                      <a class="active" href="">
                          <p class="taboneword1">{{ recordTotal }}</p>
                          <p class="taboneword2">影像档案 </p>
-                     </a>      
-                     <a href="">
+                     </a> 
+                     <router-link to="/stock/paper/0">
                         <p>5151</p>
                         <p>纸质档案</p>
-                     </a>                   
+                     </router-link>                 
                 </div>
            
             </Col>
@@ -156,12 +156,11 @@
         </Row>
 
         <Modal
-        title="分配审核员"
-        v-model="allocation"
-        ok-text="分配"
-        @on-ok="allocationsOk"
-        class-name="vertical-center-modal">
-        
+            title="分配审核员"
+            v-model="allocation"
+            ok-text="分配"
+            @on-ok="allocationsOk"
+            class-name="vertical-center-modal">
             <Select  placeholder="组别">
                 <Option value="beijing">审核组一</Option>
                 <Option value="shanghai">审核组二</Option>
@@ -171,9 +170,8 @@
             <Select  placeholder="审核员" v-model="allocationData.manager_id">
                 <Option :value="usr.id" v-for="usr in user" :key="usr.id">{{ usr.name }}</Option>
             </Select>
-    </Modal>
+        </Modal>
 
-        <!-- <Table :columns="columns" :data="record"></Table> -->
         
     </div>
 </template>
@@ -181,6 +179,7 @@
 import { mapGetters, mapActions } from 'vuex'
     export default {
         created() {
+            
             this.$store.dispatch('getRecord',{});
             this.$store.dispatch('getProduct');
             this.$store.dispatch('getUsers');
@@ -199,7 +198,6 @@ import { mapGetters, mapActions } from 'vuex'
                 this.$store.dispatch('getRecord',{type:'image',page:page});
             },
             allocations(id) {
-                // console.info(this.allocation);
                 this.allocation = true;
                 this.allocationData.id = id;
             },
@@ -253,6 +251,7 @@ import { mapGetters, mapActions } from 'vuex'
                 allocationData:{
                     manager_id:'',
                     id:'',
+                    type:1,
                 },
                 allocation:false,
                 formInline: {

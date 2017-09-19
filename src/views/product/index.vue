@@ -62,18 +62,14 @@ import { mapGetters, mapActions } from 'vuex'
                 isShowModal: false,
                 columns: [
                     {
-                        title: '产品ID',
-                        key: 'id'
-                    },
-                    {
                         title: '产品名称',
                         key: 'name'
                     },
                     {
                         title: '操作',
                         key: 'action',
-                        fixed: 'right',
-                        width: 140,
+                        // fixed: 'right',
+                        // width: 160,
                         render: (h, params) => {
                             return h('div', [
                                 
@@ -88,6 +84,75 @@ import { mapGetters, mapActions } from 'vuex'
                                         }
                                     }
                                 }, '编辑'),
+                                h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.$router.push({ name: 'customparmas', params: { id: params.row.id ,category:1}});
+                                        }
+                                    }
+                                }, '个人基本信息参数'),
+                                h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            // this.createOrUpdate(params.index);
+                                            this.$router.push({ name: 'customparmas', params: { id: params.row.id ,category:2}});
+                                        }
+                                    }
+                                }, '企业基本信息参数'),
+                                h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.$router.push({name:'customfiles',params:{product_id:params.row.id,type:1,category:1}});
+                                        }
+                                    }
+                                }, '个人影像参数'),
+                                h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            // this.createOrUpdate(params.index);
+                                            this.$router.push({name:'customfiles',params:{product_id:params.row.id,type:1,category:2}});
+                                        }
+                                    }
+                                }, '个人纸质参数'),
+                                h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            // this.createOrUpdate(params.index);
+                                            this.$router.push({name:'customfiles',params:{product_id:params.row.id,type:2,category:1}});
+                                        }
+                                    }
+                                }, '企业影像参数'),
+                                h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.$router.push({name:'customfiles',params:{product_id:params.row.id,type:2,category:2}});
+                                        }
+                                    }
+                                }, '企业纸质参数'),
                                 h('Poptip', {
                                     props: {
                                         confirm: true,

@@ -51,10 +51,10 @@
                          <p class="taboneword1">{{ recordTotal }}</p>
                          <p class="taboneword2">影像档案 </p>
                      </a>      
-                     <a href="">
-                        <p>5151</p>
+                     <router-link to="/stock/paper/0">
+                        <p>1</p>
                         <p>纸质档案</p>
-                     </a>                   
+                     </router-link>                    
                 </div>
            
             </Col>

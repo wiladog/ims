@@ -87,7 +87,8 @@
                     <div class="rukuXQCont rukuXQContpadding ">
                         <CheckboxGroup v-model="slted">
                          <dl class="allDLcont clearfix" v-for="file in curRecord.files" v-if="file.archiving_status == 0">
-                            <dt><Checkbox :label="file.id">{{ file.name }}:</Checkbox></dt>
+                         <!-- <Checkbox :label="file.id"></Checkbox> -->
+                            <dt>{{ file.name }}:</dt>
                             <dd>
                                 <div class="clearfix">
                                     <div class="fl allDLcontimg"  v-for="img in file.file_imgs">

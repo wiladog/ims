@@ -18,7 +18,7 @@ module.exports = merge(webpackBaseConfig, {
         chunkFilename: '[name].chunk.js'
     },
     devServer: {
-        open:true,
+        open:false,
         host: 'ims.wiladog.dev',
         port: 80,
         stats: { colors: true },

@@ -37,17 +37,14 @@ function generateRoutes(data) {
   let routes = [];
   data.forEach((line, k) => {
     if(line.children) {
-      // console.info('dddd');
       let tmpAbc = [];
       line.children.forEach((l,i) =>{
-        // console.info(l.path);
-        // let tmpCba = [];
-        
         if(l.children) {
           l.children.forEach((it,m)=>{
             tmpAbc.push({
               path:it.path,
               meta:it.meta,
+              name:it.name,
               component: (resolve) => require(['../../views/'+it.component+'.vue'], resolve),
             });
           });
@@ -55,14 +52,15 @@ function generateRoutes(data) {
           tmpAbc.push({
           path:l.path,
           meta:l.meta,
+          name:l.name,
           component: (resolve) => require(['../../views/'+l.component+'.vue'], resolve),
         });
         }
-        // console.info(l.children);
       });
       routes.push({
         path:line.path,
         meta:line.meta,
+        name:line.name,
         component: (resolve) => require(['../../compoments/layouts/'+line.component+'.vue'], resolve),
         children:tmpAbc
       });
@@ -70,6 +68,7 @@ function generateRoutes(data) {
       routes.push({
         path:line.path,
         meta:line.meta,
+        name:line.name,
         component: (resolve) => require(['../../views/'+line.component+'.vue'], resolve),
       });
     }

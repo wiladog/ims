@@ -1,7 +1,7 @@
 <style  scoped >
-@import '../assets/css/bootstrap.min.css';
-@import '../assets/css/mycss/public.css';
-@import '../assets/css/mycss/all.css';
+@import '../../assets/css/bootstrap.min.css';
+@import '../../assets/css/mycss/public.css';
+@import '../../assets/css/mycss/all.css';
 </style>
 <template>
     <div>
@@ -17,39 +17,39 @@
                     <div class="rukuXQCont rukuXQContcolor ">
                         <dl class="allDLcont clearfix">
                             <dt>借款人姓名：</dt>
-                            <dd>{{ curRecord.customer_name }}</dd>
+                            <dd>{{ curProfile.baseInfo.customer_name }}</dd>
                         </dl>
                         <dl class="allDLcont clearfix">
                             <dt>身份证号：</dt>
-                            <dd>{{ curRecord.customer_id_number }}</dd>
+                            <dd>{{ curProfile.baseInfo.customer_id_number }}</dd>
                         </dl>
                         <dl class="allDLcont clearfix ">
                             <dt>手机号：</dt>
-                            <dd>{{ curRecord.mobile }}</dd>
+                            <dd>{{ curProfile.baseInfo.mobile }}</dd>
                         </dl>                        
                         <dl class="allDLcont clearfix">
                             <dt>档案编号：</dt>
-                            <dd>{{ curRecord.profile_number }}</dd>
+                            <dd>{{ curProfile.baseInfo.profile_number }}</dd>
                         </dl>                       
                         <dl class="allDLcont clearfix">
                             <dt>业务编号：</dt>
-                            <dd>{{ curRecord.number }}</dd>
+                            <dd>{{ curProfile.baseInfo.number }}</dd>
                         </dl>                       
                         <dl class="allDLcont clearfix">
                             <dt>产品类型：</dt>
-                            <dd>抵押车易贷 {{ curRecord.product_id }}</dd>
+                            <dd>抵押车易贷 {{ curProfile.baseInfo.product_id }}</dd>
                         </dl>                       
                         <dl class="allDLcont clearfix">
                             <dt>借款金额：</dt>
-                            <dd>￥{{ curRecord.borrowing_amount }}</dd>
+                            <dd>￥{{ curProfile.baseInfo.borrowing_amount }}</dd>
                         </dl>                       
                         <dl class="allDLcont clearfix">
                             <dt>借款日期：</dt>
-                            <dd>{{ curRecord.borrowing_date }}</dd>
+                            <dd>{{ curProfile.baseInfo.borrowing_date }}</dd>
                         </dl>                       
                         <dl class="allDLcont clearfix">
                             <dt>数据来源：</dt>
-                            <dd>易捷金融{{ curRecord.source }}</dd>
+                            <dd>易捷金融{{ curProfile.baseInfo.source }}</dd>
                         </dl>                       
                          <dl class="allDLcont clearfix">
                             <dt>&nbsp;</dt>
@@ -57,20 +57,20 @@
                         </dl>                       
                          <dl class="allDLcont clearfix">
                             <dt>分配日期：</dt>
-                            <dd>{{ curRecord.image_distribute_time }}</dd>
+                            <dd>{{ curProfile.baseInfo.image_distribute_time }}</dd>
                         </dl>                       
                         <dl class="allDLcont clearfix">
                             <dt>归档日期：</dt>
-                            <dd>{{ curRecord.image_archive_time }}</dd>
+                            <dd>{{ curProfile.baseInfo.image_archive_time }}</dd>
                         </dl>                       
                                                                                                                     
                         
                     </div>
                 </li>
                 <li>
-                    <p class="rukubtn2">已归档影像资料</p>
+                    <p class="rukubtn2">已归档纸质资料</p>
                     <div class="rukuXQCont rukuXQContpadding ">
-                         <dl class="allDLcont clearfix" v-for="file in curRecord.files" v-if="file.archiving_status == 1">
+                         <dl class="allDLcont clearfix" v-for="file in curProfile.files" v-if="file.archiving_status == 1">
                             <dt>{{ file.name }}:</dt>
                             <dd>
                                 <div class="clearfix">
@@ -83,10 +83,10 @@
                     </div>
                 </li>
                 <li>
-                    <p class="rukubtn2">待归档影像资料</p>
+                    <p class="rukubtn2">待归档纸质资料</p>
                     <div class="rukuXQCont rukuXQContpadding ">
                         <CheckboxGroup v-model="slted">
-                         <dl class="allDLcont clearfix" v-for="file in curRecord.files" v-if="file.archiving_status == 0">
+                         <dl class="allDLcont clearfix" v-for="file in curProfile.files" v-if="file.archiving_status == 0">
                             <dt><Checkbox :label="file.id">{{ file.name }}:</Checkbox></dt>
                             <dd>
                                 <div class="clearfix">
@@ -99,8 +99,6 @@
                         </CheckboxGroup>
                     </div>
                 </li>
-                
-                
             </ul>
             
 
@@ -108,7 +106,7 @@
                 <Button type="error" @click="partArchive">部分归档</Button>
                 <Button type="info" @click="allArchive">全部归档</Button>
                 <Button type="success">查看记录</Button>
-                <Button type="warning">下载影响资料</Button>
+                <Button type="warning">下载资料</Button>
             </div>
             
         </div>
@@ -131,7 +129,8 @@
 import { mapGetters, mapActions } from 'vuex'
     export default {
         created() {
-            this.$store.dispatch('showRecord',this.$route.params);
+            console.info(this.$route.params);
+            this.$store.dispatch('profile',this.$route.params);
         },
         computed: {
             ...mapGetters({
@@ -139,6 +138,7 @@ import { mapGetters, mapActions } from 'vuex'
                 product: 'product',
                 user:'user',
                 curRecord:'curRecord',
+                curProfile:'curProfile',
             })
         },
         data () {
@@ -202,11 +202,11 @@ import { mapGetters, mapActions } from 'vuex'
             },
             allArchive() {
                 this.$Modal.confirm({
-                        title:'确认信息',
-                        content:'是否完成全部归档操作?',
-                        okText:'全部归档',
-                        onOk:this.archiveAc
-                    });
+                    title:'确认信息',
+                    content:'是否完成全部归档操作?',
+                    okText:'全部归档',
+                    onOk:this.archiveAc
+                });
             },
             archiveAc() {
                 let sltedIds = '';
@@ -214,12 +214,11 @@ import { mapGetters, mapActions } from 'vuex'
                     sltedIds += line +',';
                 });
                 sltedIds = sltedIds.substring(0,sltedIds.length -1);
-                this.$store.dispatch('archiveAc',{ids:sltedIds,rid:this.$route.params.id,type:1}).then((rsp)=>{
+                this.$store.dispatch('archiveAc',{ids:sltedIds,rid:this.$route.params.id,type:2}).then((rsp)=>{
                     this.$router.go(-1);
                 });
             },
             showImg (url) {
-                // console.info(url);
                 this.showImgUrl = url;
                 this.showImgUrlModal = true;
             },

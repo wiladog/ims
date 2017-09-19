@@ -54,11 +54,31 @@ export const DELETE_ROLES = 'DELETE_ROLES'
 // 用户
 export const GET_USERS = 'GET_USERS'
 export const DELETE_USER = 'DELETE_USER'
-
-
 export const SHOW_RECORD = 'SHOW_RECORD'
-
-
 export const ARCHIVEAC = 'ARCHIVEAC'
+export const GET_PRODUCT_PARAMS = 'GET_PRODUCT_PARAMS'
+export const CREATE_USER = 'CREATE_USER'
+export const ADD_PARMAS_LINE = 'ADD_PARMAS_LINE'
+export const UPDATE_PRVS = 'UPDATE_PRVS'
+export const GET_PRODUCT_FILES = 'GET_PRODUCT_FILES'
+export const GET_PROFILE_LIST = 'GET_PROFILE_LIST'
+export const GET_PROFILE = 'GET_PROFILE'
+export const SECONDMENT_LIST = 'SECONDMENT_LIST'
+export const SECONDMENT_AUDIT = 'SECONDMENT_AUDIT'
+export const SECONDMENT_DISTRIBUTE = 'SECONDMENT_DISTRIBUTE'
+export const SECONDMENT_TAKE = 'SECONDMENT_TAKE'
+export const SECONDMENT_GIVEBACK = 'SECONDMENT_GIVEBACK'
+export const SECONDMENT_FINISH = 'SECONDMENT_FINISH'
+
+// 档案架
+export const GET_RACK = 'GET_RACK'
+export const EDIT_LOCATION = 'EDIT_LOCATION'
+export const EDIT_RACK = 'EDIT_RACK'
+export const EDIT_BOX = 'EDIT_BOX'
+export const DELETE_FILERACK = 'DELETE_FILERACK'
+
+export const ADD_LOCATION = 'ADD_LOCATION'
+export const ADD_RACK = 'ADD_RACK'
+export const ADD_BOX = 'ADD_BOX'
 
 
